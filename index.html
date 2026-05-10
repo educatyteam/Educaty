@@ -32,9 +32,9 @@
       --body:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
     }
 
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0}
-    html{scroll-behavior:smooth}
+    *{box-sizing:border-box;min-width:0}
+    html,body{margin:0;padding:0;max-width:100%}
+    html{scroll-behavior:smooth;overflow-x:hidden}
     body{
       font-family:var(--body);
       color:var(--ink);
@@ -44,6 +44,7 @@
       font-size:17px;
       line-height:1.55;
       overflow-x:hidden;
+      width:100%;
     }
     img,video{max-width:100%;display:block}
     a{color:inherit;text-decoration:none}
@@ -61,6 +62,10 @@
       font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
       padding:8px 14px;border:1px solid var(--line);border-radius:999px;
       background:rgba(255,255,255,.5);backdrop-filter:blur(6px);
+      max-width:100%;
+    }
+    @media (max-width: 520px){
+      .eyebrow{font-size:11px;padding:7px 12px;letter-spacing:.08em}
     }
     .eyebrow .dot{width:6px;height:6px;border-radius:999px;background:var(--ink);display:inline-block}
     .eyebrow.on-dark{border-color:var(--line-on-dark);background:rgba(255,255,255,.05);color:#fff}
@@ -69,11 +74,11 @@
 
     /* -------- buttons -------- */
     .btn{
-      display:inline-flex;align-items:center;gap:10px;
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
       padding:18px 26px;border-radius:999px;
-      font-weight:600;font-size:16px;line-height:1;
+      font-weight:600;font-size:16px;line-height:1.2;
       transition:transform .25s ease, background .25s ease, color .25s ease, border-color .25s ease;
-      white-space:nowrap;
+      text-align:center;max-width:100%;
     }
     .btn-primary{background:var(--ink);color:#fff}
     .btn-primary:hover{background:#222;transform:translateY(-1px)}
@@ -102,16 +107,20 @@
     .topbar nav{display:flex;gap:24px}
     .topbar nav a{font-size:15px;font-weight:500;color:var(--ink);opacity:.78;transition:opacity .2s}
     .topbar nav a:hover{opacity:1}
-    .topbar .right{display:flex;align-items:center;gap:18px}
+    .topbar .right{display:flex;align-items:center;gap:18px;min-width:0;flex:0 0 auto}
     .topbar .phone{font-weight:600;font-size:14px;color:var(--ink);white-space:nowrap}
     .topbar .phone:hover{opacity:.7}
-    .topbar .cta{padding:12px 18px;font-size:14px}
+    .topbar .cta{padding:12px 18px;font-size:14px;white-space:nowrap}
+    .topbar .cta .lbl-sm{display:none}
     @media (max-width: 1100px){
       .topbar nav{display:none}
     }
     @media (max-width: 720px){
       .topbar .phone{display:none}
-      .topbar .cta{padding:10px 14px;font-size:13px}
+      .topbar .cta{padding:11px 16px;font-size:13px}
+      .topbar .cta .lbl{display:none}
+      .topbar .cta .lbl-sm{display:inline}
+      .topbar .cta .arrow{display:none}
     }
 
     /* -------- hero -------- */
@@ -130,27 +139,38 @@
       display:grid;grid-template-columns:1.35fr .95fr;gap:clamp(28px,4vw,56px);
       align-items:start;position:relative;
     }
+    .hero .grid > *{min-width:0}
     .hero h1{
-      font-size:clamp(46px,7.2vw,108px);
+      font-size:clamp(40px,7.2vw,108px);
       margin:18px 0 0;
+      word-break:break-word;
     }
     .hero h1 .first{font-weight:700;color:var(--ink)}
     .hero h1 .accent{
       display:inline-block;background:var(--ink);color:var(--yellow);
       padding:0 .14em .04em;border-radius:18px;line-height:.95;
-      font-weight:800;
+      font-weight:800;max-width:100%;
     }
     .hero .sub{
       font-size:clamp(17px,1.4vw,20px);max-width:44ch;color:var(--ink);opacity:.82;
       margin:22px 0 28px;line-height:1.5;
     }
     .hero .ctas{display:flex;gap:14px;flex-wrap:wrap}
-    .hero-side{display:flex;flex-direction:column;gap:14px;align-self:start;margin-top:38px}
+    @media (max-width: 520px){
+      .hero .ctas{flex-direction:column;align-items:stretch}
+      .hero .ctas .btn{width:100%}
+    }
+    .hero-side{display:flex;flex-direction:column;gap:14px;align-self:start;margin-top:38px;min-width:0;width:100%}
     .hero-video{
       margin:0;border-radius:var(--radius-lg);overflow:hidden;
       position:relative;background:#0F0F0F;aspect-ratio:9/12;
       box-shadow:0 30px 60px -28px rgba(10,10,10,.45);
       transform:rotate(-1.2deg);
+      max-width:100%;
+    }
+    @media (max-width: 900px){
+      .hero-side{margin-top:8px}
+      .hero-video{aspect-ratio:16/11;transform:none;border-radius:24px}
     }
     .hero-video video{width:100%;height:100%;object-fit:cover;display:block}
     .hero-video figcaption{
@@ -193,16 +213,19 @@
     @keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
     /* -------- generic section -------- */
-    section{padding:clamp(72px,10vw,140px) 0;position:relative}
-    .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-bottom:clamp(36px,5vw,64px)}
+    section{padding:clamp(56px,9vw,140px) 0;position:relative}
+    .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-bottom:clamp(36px,5vw,64px);min-width:0}
+    .section-head>div{min-width:0}
     .section-head h2{
-      font-family:var(--display);font-weight:800;font-size:clamp(38px,6vw,80px);
+      font-family:var(--display);font-weight:800;font-size:clamp(32px,6vw,80px);
       line-height:.95;letter-spacing:-.02em;margin:14px 0 0;max-width:18ch;
+      word-break:break-word;
     }
     .section-head .lead{max-width:38ch;font-size:17px;color:var(--muted)}
     @media (max-width:860px){
-      .section-head{flex-direction:column;align-items:flex-start}
+      .section-head{flex-direction:column;align-items:flex-start;gap:20px}
     }
+    h2,h3,h4{word-break:break-word}
 
     /* -------- masterclass invitation (now near top) -------- */
     #masterclass{padding-top:clamp(64px,9vw,120px)}
@@ -275,9 +298,11 @@
       .mc-photos figure:nth-child(4){transform:none}
     }
     @media (max-width:520px){
+      .mc{padding:24px 18px}
       .mc-meta{grid-template-columns:1fr}
-      .mc-form .row{grid-template-columns:1fr}
-      .mc-photos{grid-template-columns:1fr 1fr}
+      .mc-form{padding:20px}
+      .mc-photos{grid-template-columns:1fr 1fr;gap:8px}
+      .mc-photos figure{aspect-ratio:1/1.1}
     }
 
     /* -------- capabilities -------- */
@@ -345,6 +370,11 @@
       .sh-6{grid-column:1/4;grid-row:span 5}
       .sh-7{grid-column:4/7;grid-row:span 5}
       .sh-8{grid-column:1/7;grid-row:span 5}
+    }
+    @media (max-width: 520px){
+      .showcase{grid-template-columns:1fr 1fr;grid-auto-rows:54px}
+      .sh-1,.sh-5,.sh-8{grid-column:1/-1;grid-row:span 5}
+      .sh-2,.sh-3,.sh-4,.sh-6,.sh-7{grid-column:span 1;grid-row:span 4}
     }
 
     /* -------- Серия (horizontal scroll) -------- */
@@ -478,6 +508,11 @@
       .cm-5{grid-column:4/7;grid-row:span 4}
       .cm-6{grid-column:1/4;grid-row:span 4}
       .cm-7{grid-column:4/7;grid-row:span 4}
+    }
+    @media (max-width: 520px){
+      .community{grid-template-columns:1fr 1fr;grid-auto-rows:56px}
+      .cm-1{grid-column:1/-1;grid-row:span 6}
+      .cm-2,.cm-3,.cm-4,.cm-5,.cm-6,.cm-7{grid-column:span 1;grid-row:span 4}
     }
 
     /* -------- FAQ -------- */
@@ -628,7 +663,8 @@
       <div class="right">
         <a class="phone" href="tel:+78123855230">+7 812 385‑52‑30</a>
         <a class="btn btn-primary cta" href="#masterclass">
-          Бесплатный мастер-класс в Петербурге
+          <span class="lbl">Бесплатный мастер-класс в Петербурге</span>
+          <span class="lbl-sm">Записаться</span>
           <span class="arrow">→</span>
         </a>
       </div>
@@ -1212,19 +1248,26 @@
       });
     })();
 
-    // -------- sticky CTA: показываем после блока мастер-класса --------
+    // -------- sticky CTA: появляется только когда пользователь прокрутил
+    // ниже блока «бесплатный мастер-класс» (нижний край блока ушёл за верх viewport)
     (function(){
       const cta = document.getElementById('stickyCta');
       const mc  = document.getElementById('masterclass');
+      const final = document.querySelector('.final');
       if(!cta || !mc) return;
       function check(){
         const r = mc.getBoundingClientRect();
-        // показываем когда низ блока МК ушёл выше 80% высоты экрана
-        const passed = r.bottom < window.innerHeight * 0.2;
-        // и не показываем на самом верху страницы
-        const scrolled = window.scrollY > 200;
-        cta.classList.toggle('is-on', passed && scrolled);
-        cta.setAttribute('aria-hidden', (passed && scrolled) ? 'false' : 'true');
+        // блок полностью ушёл выше: нижний край МК выше верха viewport
+        const passed = r.bottom < 0;
+        // и не показываем когда пользователь дошёл до финального CTA (там уже есть кнопка)
+        let nearFinal = false;
+        if (final){
+          const fr = final.getBoundingClientRect();
+          nearFinal = fr.top < window.innerHeight * 0.6;
+        }
+        const show = passed && !nearFinal;
+        cta.classList.toggle('is-on', show);
+        cta.setAttribute('aria-hidden', show ? 'false' : 'true');
       }
       window.addEventListener('scroll', check, {passive:true});
       window.addEventListener('resize', check);
