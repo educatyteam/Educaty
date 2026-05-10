@@ -1,0 +1,1262 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Educaty – Школа нейросетей в Санкт-Петербурге</title>
+  <meta name="description" content="Станьте востребованным AI-креатором. Обучение нейросетям через практику и реальные кейсы. Освойте конкретные навыки для бизнеса и творчества. Начните сейчас!" />
+  <link rel="icon" type="image/png" href="assets/img/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/img/favicon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Unbounded:wght@500;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* -------- design tokens -------- */
+    :root{
+      --yellow:#ECF6A0;
+      --yellow-deep:#DDE986;
+      --cream:#FAF8EE;
+      --ink:#0A0A0A;
+      --ink-2:#1A1A1A;
+      --line:rgba(10,10,10,.12);
+      --line-on-dark:rgba(255,255,255,.14);
+      --muted:#5A5A55;
+      --muted-on-dark:#A6A6A0;
+      --radius:22px;
+      --radius-lg:34px;
+      --maxw:1280px;
+      --gutter:clamp(20px,4vw,56px);
+      --display:"Unbounded","Inter",system-ui,sans-serif;
+      --body:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:var(--body);
+      color:var(--ink);
+      background:var(--cream);
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+      font-size:17px;
+      line-height:1.55;
+      overflow-x:hidden;
+    }
+    img,video{max-width:100%;display:block}
+    a{color:inherit;text-decoration:none}
+    button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter)}
+    .display{
+      font-family:var(--display);
+      font-weight:800;
+      letter-spacing:-0.025em;
+      line-height:.92;
+    }
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:10px;
+      font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+      padding:8px 14px;border:1px solid var(--line);border-radius:999px;
+      background:rgba(255,255,255,.5);backdrop-filter:blur(6px);
+    }
+    .eyebrow .dot{width:6px;height:6px;border-radius:999px;background:var(--ink);display:inline-block}
+    .eyebrow.on-dark{border-color:var(--line-on-dark);background:rgba(255,255,255,.05);color:#fff}
+    .eyebrow.on-dark .dot{background:var(--yellow)}
+    .eyebrow.on-yellow{background:rgba(10,10,10,.06);border-color:rgba(10,10,10,.1)}
+
+    /* -------- buttons -------- */
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:18px 26px;border-radius:999px;
+      font-weight:600;font-size:16px;line-height:1;
+      transition:transform .25s ease, background .25s ease, color .25s ease, border-color .25s ease;
+      white-space:nowrap;
+    }
+    .btn-primary{background:var(--ink);color:#fff}
+    .btn-primary:hover{background:#222;transform:translateY(-1px)}
+    .btn-yellow{background:var(--yellow);color:var(--ink)}
+    .btn-yellow:hover{background:var(--yellow-deep);transform:translateY(-1px)}
+    .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+    .btn-ghost:hover{background:var(--ink);color:#fff}
+    .btn-ghost-light{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.5)}
+    .btn-ghost-light:hover{background:#fff;color:var(--ink)}
+    .btn .arrow{
+      width:26px;height:26px;border-radius:999px;display:inline-grid;place-items:center;
+      background:var(--yellow);color:var(--ink);font-size:14px;font-weight:700;
+    }
+    .btn-yellow .arrow{background:var(--ink);color:var(--yellow)}
+
+    /* -------- topbar -------- */
+    .topbar{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter:saturate(160%) blur(14px);
+      background:rgba(250,248,238,.78);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar .inner{display:flex;align-items:center;justify-content:space-between;height:72px;gap:18px}
+    .topbar .logo{display:flex;align-items:center;gap:10px}
+    .topbar .logo img{height:26px;width:auto}
+    .topbar nav{display:flex;gap:24px}
+    .topbar nav a{font-size:15px;font-weight:500;color:var(--ink);opacity:.78;transition:opacity .2s}
+    .topbar nav a:hover{opacity:1}
+    .topbar .right{display:flex;align-items:center;gap:18px}
+    .topbar .phone{font-weight:600;font-size:14px;color:var(--ink);white-space:nowrap}
+    .topbar .phone:hover{opacity:.7}
+    .topbar .cta{padding:12px 18px;font-size:14px}
+    @media (max-width: 1100px){
+      .topbar nav{display:none}
+    }
+    @media (max-width: 720px){
+      .topbar .phone{display:none}
+      .topbar .cta{padding:10px 14px;font-size:13px}
+    }
+
+    /* -------- hero -------- */
+    .hero{
+      position:relative;background:var(--yellow);
+      padding:clamp(28px,5vw,56px) 0 clamp(48px,7vw,84px);
+      overflow:hidden;
+    }
+    .hero::before{
+      content:"";position:absolute;inset:auto -20% -40% auto;
+      width:80%;height:80%;
+      background:radial-gradient(closest-side,rgba(255,255,255,.55),transparent 70%);
+      filter:blur(20px);pointer-events:none;
+    }
+    .hero .grid{
+      display:grid;grid-template-columns:1.35fr .95fr;gap:clamp(28px,4vw,56px);
+      align-items:start;position:relative;
+    }
+    .hero h1{
+      font-size:clamp(46px,7.2vw,108px);
+      margin:18px 0 0;
+    }
+    .hero h1 .first{font-weight:700;color:var(--ink)}
+    .hero h1 .accent{
+      display:inline-block;background:var(--ink);color:var(--yellow);
+      padding:0 .14em .04em;border-radius:18px;line-height:.95;
+      font-weight:800;
+    }
+    .hero .sub{
+      font-size:clamp(17px,1.4vw,20px);max-width:44ch;color:var(--ink);opacity:.82;
+      margin:22px 0 28px;line-height:1.5;
+    }
+    .hero .ctas{display:flex;gap:14px;flex-wrap:wrap}
+    .hero-side{display:flex;flex-direction:column;gap:14px;align-self:start;margin-top:38px}
+    .hero-video{
+      margin:0;border-radius:var(--radius-lg);overflow:hidden;
+      position:relative;background:#0F0F0F;aspect-ratio:9/12;
+      box-shadow:0 30px 60px -28px rgba(10,10,10,.45);
+      transform:rotate(-1.2deg);
+    }
+    .hero-video video{width:100%;height:100%;object-fit:cover;display:block}
+    .hero-video figcaption{
+      position:absolute;left:14px;bottom:14px;
+    }
+    .hero-video .tag{
+      display:inline-flex;align-items:center;
+      background:rgba(255,255,255,.92);color:var(--ink);
+      font-size:12px;font-weight:600;letter-spacing:.04em;
+      padding:8px 12px;border-radius:999px;
+    }
+    .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .stat{
+      background:rgba(255,255,255,.55);backdrop-filter:blur(6px);
+      border:1px solid rgba(10,10,10,.06);
+      border-radius:var(--radius);padding:18px 18px 16px;
+    }
+    .stat .num{font-family:var(--display);font-weight:800;font-size:32px;line-height:1;letter-spacing:-.02em}
+    .stat .lbl{font-size:13px;color:var(--muted);margin-top:8px}
+
+    @media (max-width: 900px){
+      .hero .grid{grid-template-columns:1fr}
+      .hero-card{transform:none}
+    }
+
+    /* -------- marquee -------- */
+    .marquee{
+      background:var(--ink);color:var(--yellow);
+      border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);
+      overflow:hidden;
+    }
+    .marquee-track{
+      display:flex;gap:48px;padding:22px 0;
+      width:max-content;animation:slide 40s linear infinite;
+      font-family:var(--display);font-weight:700;font-size:clamp(22px,3vw,38px);
+      letter-spacing:-.01em;
+    }
+    .marquee-track span{display:inline-flex;align-items:center;gap:48px;white-space:nowrap}
+    .marquee-track .dot{width:14px;height:14px;border-radius:999px;background:var(--yellow);display:inline-block}
+    @keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+    /* -------- generic section -------- */
+    section{padding:clamp(72px,10vw,140px) 0;position:relative}
+    .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-bottom:clamp(36px,5vw,64px)}
+    .section-head h2{
+      font-family:var(--display);font-weight:800;font-size:clamp(38px,6vw,80px);
+      line-height:.95;letter-spacing:-.02em;margin:14px 0 0;max-width:18ch;
+    }
+    .section-head .lead{max-width:38ch;font-size:17px;color:var(--muted)}
+    @media (max-width:860px){
+      .section-head{flex-direction:column;align-items:flex-start}
+    }
+
+    /* -------- masterclass invitation (now near top) -------- */
+    #masterclass{padding-top:clamp(64px,9vw,120px)}
+    .mc{
+      background:var(--yellow);border-radius:var(--radius-lg);
+      padding:clamp(28px,4vw,64px);position:relative;overflow:hidden;
+    }
+    .mc .grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,56px);align-items:stretch}
+    .mc .badges{display:flex;flex-wrap:wrap;gap:8px}
+    .mc .badge{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:var(--yellow);padding:8px 14px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+    .mc .badge.alt{background:rgba(10,10,10,.08);color:var(--ink)}
+    .mc h2{font-family:var(--display);font-weight:800;font-size:clamp(34px,4.6vw,58px);line-height:.95;letter-spacing:-.02em;margin:18px 0 18px;max-width:16ch}
+    .mc .lead{font-size:17px;color:var(--ink);opacity:.82;max-width:46ch;margin:0 0 24px}
+
+    .mc-meta{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 0 0}
+    .mc-meta .it{
+      background:rgba(10,10,10,.07);border-radius:18px;padding:16px 18px;
+      display:flex;flex-direction:column;gap:6px;
+    }
+    .mc-meta .it .k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--ink);opacity:.55}
+    .mc-meta .it .v{font-weight:600;font-size:15px;color:var(--ink);line-height:1.3}
+
+    .mc-form{
+      background:#fff;border-radius:28px;
+      padding:clamp(24px,2.4vw,36px);
+      box-shadow:0 30px 60px -28px rgba(10,10,10,.25);
+      display:flex;flex-direction:column;gap:18px;
+      align-self:stretch;justify-content:center;
+    }
+    .mc-form h3{
+      font-family:var(--display);font-weight:700;font-size:clamp(22px,2vw,28px);
+      letter-spacing:-.01em;line-height:1.1;margin:0;
+    }
+    .mc-form .lead-sm{font-size:14px;color:var(--muted);margin:-8px 0 0}
+    .mc-form form{display:flex;flex-direction:column;gap:12px}
+    .mc-form .row{display:flex;flex-direction:column;gap:12px}
+    .mc-form input{
+      padding:18px 22px;border:1.5px solid var(--line);border-radius:16px;font-size:16px;
+      font-family:inherit;background:#FAFAF7;width:100%;font-weight:500;
+      transition:border-color .2s ease, background .2s ease;
+    }
+    .mc-form input::placeholder{color:#9A9A93}
+    .mc-form input:focus{outline:none;border-color:var(--ink);background:#fff}
+    .mc-form .btn{justify-content:center;width:100%;padding:22px 26px;font-size:17px;margin-top:6px}
+    .mc-form .hint{
+      display:block;text-align:center;margin-top:4px;
+      font-size:16px;color:var(--ink);opacity:.85;font-weight:600;
+    }
+    .mc-form .small{display:block;text-align:center;font-size:12px;color:var(--muted)}
+    .mc-form .ok{display:none;text-align:center;padding:18px 12px}
+    .mc-form .ok h4{font-family:var(--display);font-weight:700;font-size:22px;margin:0 0 8px}
+    .mc-form .ok p{margin:0;color:var(--muted)}
+    .mc-form.is-sent form{display:none}
+    .mc-form.is-sent .ok{display:block}
+
+    /* horizontal photo strip below */
+    .mc-photos{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:clamp(28px,3vw,40px);
+    }
+    .mc-photos figure{margin:0;border-radius:22px;overflow:hidden;position:relative;background:#222;aspect-ratio:4/5}
+    .mc-photos img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s ease}
+    .mc-photos figure:hover img{transform:scale(1.05)}
+    .mc-photos figure:nth-child(2){aspect-ratio:4/5;transform:translateY(14px)}
+    .mc-photos figure:nth-child(4){transform:translateY(14px)}
+
+    @media (max-width:980px){
+      .mc .grid{grid-template-columns:1fr}
+      .mc-photos{grid-template-columns:repeat(2,1fr)}
+      .mc-photos figure:nth-child(2),
+      .mc-photos figure:nth-child(4){transform:none}
+    }
+    @media (max-width:520px){
+      .mc-meta{grid-template-columns:1fr}
+      .mc-form .row{grid-template-columns:1fr}
+      .mc-photos{grid-template-columns:1fr 1fr}
+    }
+
+    /* -------- capabilities -------- */
+    .caps{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(14px,1.6vw,22px)}
+    .cap{
+      grid-column:span 6;
+      background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);
+      padding:34px;display:flex;flex-direction:column;min-height:280px;
+      position:relative;overflow:hidden;transition:transform .3s ease, box-shadow .3s ease;
+    }
+    .cap:hover{transform:translateY(-4px);box-shadow:0 24px 48px -28px rgba(10,10,10,.25)}
+    .cap .num{font-family:var(--display);font-weight:800;font-size:18px;letter-spacing:.06em;color:var(--muted)}
+    .cap h3{font-family:var(--display);font-weight:700;font-size:clamp(22px,2.4vw,30px);line-height:1.05;margin:18px 0 10px;letter-spacing:-.01em}
+    .cap p{color:var(--muted);margin:0 0 24px}
+    .cap .tag{align-self:flex-start;margin-top:auto;background:var(--yellow);color:var(--ink);font-weight:600;font-size:13px;padding:8px 12px;border-radius:999px}
+    .cap.ink{background:var(--ink);color:#fff;border-color:var(--ink)}
+    .cap.ink .num,.cap.ink p{color:var(--muted-on-dark)}
+    .cap.ink .tag{background:var(--yellow)}
+    .cap.span-12{grid-column:span 12}
+    .cap.span-8{grid-column:span 8}
+    .cap.span-4{grid-column:span 4}
+    @media (max-width:900px){
+      .cap,.cap.span-8,.cap.span-4,.cap.span-12{grid-column:span 12}
+    }
+
+    /* -------- AI showcase (chaotic grid) -------- */
+    .showcase-head{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;margin-bottom:clamp(28px,4vw,52px);flex-wrap:wrap}
+    .showcase-head h2{font-family:var(--display);font-weight:800;font-size:clamp(38px,6vw,76px);line-height:.95;letter-spacing:-.02em;margin:14px 0 0;max-width:20ch}
+    .showcase-head .lead{max-width:42ch;font-size:17px;color:var(--muted)}
+    .showcase{
+      display:grid;
+      grid-template-columns:repeat(12,1fr);
+      grid-auto-rows:80px;
+      gap:14px;
+    }
+    .sh{
+      position:relative;border-radius:24px;overflow:hidden;background:#0F0F0F;
+      transition:transform .8s cubic-bezier(.2,.8,.2,1);
+      will-change:transform;
+    }
+    .sh img,.sh video{width:100%;height:100%;object-fit:cover;display:block}
+    .sh::after{
+      content:attr(data-tool);
+      position:absolute;left:14px;bottom:12px;
+      font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+      background:rgba(255,255,255,.92);color:var(--ink);
+      padding:6px 10px;border-radius:999px;font-weight:600;
+      pointer-events:none;
+    }
+    .sh-1{grid-column:1/6;grid-row:span 7}
+    .sh-2{grid-column:6/10;grid-row:span 4}
+    .sh-3{grid-column:10/13;grid-row:span 5}
+    .sh-4{grid-column:6/9;grid-row:span 6}
+    .sh-5{grid-column:9/13;grid-row:span 4}
+    .sh-6{grid-column:1/5;grid-row:span 5}
+    .sh-7{grid-column:5/9;grid-row:span 5}
+    .sh-8{grid-column:9/13;grid-row:span 6}
+    @media (max-width: 980px){
+      .showcase{grid-template-columns:repeat(6,1fr);grid-auto-rows:64px}
+      .sh-1{grid-column:1/4;grid-row:span 6}
+      .sh-2{grid-column:4/7;grid-row:span 4}
+      .sh-3{grid-column:1/4;grid-row:span 4}
+      .sh-4{grid-column:4/7;grid-row:span 5}
+      .sh-5{grid-column:1/7;grid-row:span 4}
+      .sh-6{grid-column:1/4;grid-row:span 5}
+      .sh-7{grid-column:4/7;grid-row:span 5}
+      .sh-8{grid-column:1/7;grid-row:span 5}
+    }
+
+    /* -------- Серия (horizontal scroll) -------- */
+    .seria{
+      background:var(--ink);color:#fff;border-radius:var(--radius-lg);
+      padding:clamp(40px,5vw,80px) 0 clamp(40px,5vw,80px);
+      overflow:hidden;
+    }
+    .seria-head{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap;padding:0 clamp(28px,4vw,64px) clamp(28px,4vw,52px)}
+    .seria-head h2{font-family:var(--display);font-weight:800;font-size:clamp(34px,5vw,64px);line-height:.95;letter-spacing:-.02em;margin:14px 0 0;max-width:18ch}
+    .seria-head .lead{max-width:46ch;font-size:16px;color:var(--muted-on-dark)}
+    .seria-rail{
+      display:flex;gap:14px;overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      padding:0 clamp(28px,4vw,64px) 18px;
+      scrollbar-width:none;
+    }
+    .seria-rail::-webkit-scrollbar{display:none}
+    .seria-rail figure{
+      margin:0;flex:0 0 auto;width:clamp(220px,28vw,360px);height:clamp(300px,40vw,520px);
+      border-radius:22px;overflow:hidden;background:#222;scroll-snap-align:start;position:relative;
+    }
+    .seria-rail figure.tall{height:clamp(360px,46vw,580px)}
+    .seria-rail img,.seria-rail video{width:100%;height:100%;object-fit:cover}
+    .seria-bar{
+      display:flex;align-items:center;gap:16px;padding:18px clamp(28px,4vw,64px) 0;
+      color:var(--muted-on-dark);font-size:13px;
+    }
+    .seria-bar .line{flex:1;height:2px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden;position:relative}
+    .seria-bar .line::after{content:"";position:absolute;left:0;top:0;bottom:0;width:18%;background:var(--yellow);border-radius:2px;transition:width .25s ease,left .25s ease}
+    .seria-bar .hint{display:flex;align-items:center;gap:8px}
+
+    /* -------- program list -------- */
+    .program{
+      background:var(--ink);color:#fff;border-radius:var(--radius-lg);
+      padding:clamp(28px,4vw,56px);
+    }
+    .program .row{
+      display:grid;grid-template-columns:120px 1fr auto;gap:24px;
+      padding:28px 8px;border-bottom:1px solid var(--line-on-dark);
+      align-items:center;transition:background .25s ease;
+    }
+    .program .row:hover{background:rgba(255,255,255,.03)}
+    .program .row:last-child{border-bottom:none}
+    .program .num{font-family:var(--display);font-weight:800;font-size:clamp(36px,5vw,64px);letter-spacing:-.02em;color:var(--yellow);line-height:1}
+    .program .ttl{font-family:var(--display);font-weight:600;font-size:clamp(20px,2.2vw,28px);line-height:1.1;letter-spacing:-.01em}
+    .program .desc{color:var(--muted-on-dark);margin-top:6px;font-size:15px;max-width:60ch}
+    .program .meta{font-size:13px;color:var(--muted-on-dark);text-align:right;font-variant-numeric:tabular-nums}
+    @media (max-width:760px){
+      .program .row{grid-template-columns:64px 1fr;gap:14px}
+      .program .meta{grid-column:1/-1;text-align:left;padding-left:78px}
+    }
+
+    /* -------- audience -------- */
+    .audience{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,1.6vw,22px)}
+    .who{
+      background:var(--yellow);border-radius:var(--radius-lg);padding:32px;
+      display:flex;flex-direction:column;min-height:300px;border:1px solid rgba(10,10,10,.06);
+    }
+    .who h3{font-family:var(--display);font-weight:700;font-size:clamp(20px,2.2vw,26px);margin:18px 0 8px;line-height:1.05;letter-spacing:-.01em}
+    .who p{color:var(--ink);opacity:.72;margin:0}
+    .who .icon{
+      width:54px;height:54px;border-radius:18px;background:var(--ink);color:var(--yellow);
+      display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:20px;
+    }
+    .who ul{margin:18px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+    .who li{padding-left:22px;position:relative;color:var(--ink);opacity:.85;font-size:15px}
+    .who li::before{content:"";width:8px;height:8px;border-radius:999px;background:var(--ink);position:absolute;left:0;top:9px}
+    .who.alt{background:#fff;border:1px solid var(--line)}
+    .who.alt .icon{background:var(--yellow);color:var(--ink)}
+    @media (max-width:1100px){.audience{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:680px){.audience{grid-template-columns:1fr}}
+
+    /* -------- Community -------- */
+    .community-head{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;margin-bottom:clamp(28px,4vw,52px);flex-wrap:wrap}
+    .community-head h2{font-family:var(--display);font-weight:800;font-size:clamp(38px,5.8vw,72px);line-height:.95;letter-spacing:-.02em;margin:14px 0 0;max-width:18ch}
+    .community-head .lead{max-width:44ch;font-size:17px;color:var(--muted)}
+
+    .community{
+      display:grid;
+      grid-template-columns:repeat(12,1fr);
+      grid-auto-rows:74px;
+      gap:14px;
+    }
+    .cm{
+      position:relative;border-radius:24px;overflow:hidden;background:#0F0F0F;
+      transition:transform .8s cubic-bezier(.2,.8,.2,1);
+    }
+    .cm img,.cm video{width:100%;height:100%;object-fit:cover;display:block}
+    .cm .label{
+      position:absolute;left:14px;bottom:12px;
+      display:inline-flex;align-items:center;gap:8px;
+      background:rgba(255,255,255,.94);color:var(--ink);
+      font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;
+      padding:6px 10px;border-radius:999px;
+    }
+    .cm .label .dot{width:6px;height:6px;border-radius:999px;background:var(--ink);display:inline-block}
+    .cm.live .label .dot{
+      background:#E94B4B;
+      animation:livePulse 1.8s ease-in-out infinite;
+    }
+    @keyframes livePulse{
+      0%,100%{box-shadow:0 0 0 0 rgba(233,75,75,.65)}
+      50%   {box-shadow:0 0 0 8px rgba(233,75,75,0)}
+    }
+    .cm-1{grid-column:1/7;grid-row:span 9}
+    .cm-2{grid-column:7/13;grid-row:span 5}
+    .cm-3{grid-column:7/10;grid-row:span 4}
+    .cm-4{grid-column:10/13;grid-row:span 4}
+    .cm-5{grid-column:1/5;grid-row:span 5}
+    .cm-6{grid-column:5/9;grid-row:span 5}
+    .cm-7{grid-column:9/13;grid-row:span 5}
+
+    .community-meta{
+      display:flex;flex-wrap:wrap;gap:10px;margin-top:clamp(24px,3vw,36px);
+    }
+    .community-meta .pill{
+      display:inline-flex;align-items:center;gap:10px;
+      background:var(--yellow);color:var(--ink);
+      padding:12px 18px;border-radius:999px;
+      font-size:14px;font-weight:600;letter-spacing:.02em;
+    }
+    .community-meta .pill .dot{width:8px;height:8px;border-radius:999px;background:var(--ink);display:inline-block}
+
+    @media (max-width: 980px){
+      .community{grid-template-columns:repeat(6,1fr);grid-auto-rows:64px}
+      .cm-1{grid-column:1/7;grid-row:span 6}
+      .cm-2{grid-column:1/4;grid-row:span 4}
+      .cm-3{grid-column:4/7;grid-row:span 4}
+      .cm-4{grid-column:1/4;grid-row:span 4}
+      .cm-5{grid-column:4/7;grid-row:span 4}
+      .cm-6{grid-column:1/4;grid-row:span 4}
+      .cm-7{grid-column:4/7;grid-row:span 4}
+    }
+
+    /* -------- FAQ -------- */
+    .faq{display:flex;flex-direction:column;gap:0}
+    .faq details{border-top:1px solid var(--line);padding:22px 4px}
+    .faq details:last-child{border-bottom:1px solid var(--line)}
+    .faq summary{
+      list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:24px;
+      font-family:var(--display);font-weight:600;font-size:clamp(20px,2.2vw,26px);letter-spacing:-.01em;line-height:1.2;
+    }
+    .faq summary::-webkit-details-marker{display:none}
+    .faq summary::after{
+      content:"+";font-family:var(--display);font-weight:700;font-size:28px;
+      width:44px;height:44px;border-radius:999px;background:var(--ink);color:var(--yellow);
+      display:grid;place-items:center;flex:none;transition:transform .3s ease;
+    }
+    .faq details[open] summary::after{content:"–"}
+    .faq .a{color:var(--muted);margin-top:14px;font-size:16px;max-width:70ch}
+
+    /* -------- final CTA -------- */
+    .final{
+      background:var(--ink);color:#fff;border-radius:var(--radius-lg);
+      padding:clamp(40px,6vw,96px);position:relative;overflow:hidden;
+      display:flex;flex-direction:column;align-items:center;text-align:center;gap:28px;
+    }
+    .final::before{
+      content:"";position:absolute;left:50%;top:-30%;transform:translateX(-50%);
+      width:80vw;height:80vw;max-width:900px;max-height:900px;
+      background:radial-gradient(closest-side,rgba(236,246,160,.18),transparent 70%);
+      pointer-events:none;
+    }
+    .final h2{font-family:var(--display);font-weight:800;font-size:clamp(40px,7vw,96px);line-height:.92;letter-spacing:-.02em;margin:0;max-width:18ch;position:relative}
+    .final p{color:var(--muted-on-dark);max-width:50ch;margin:0;position:relative}
+    .final .ctas{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;position:relative}
+
+    /* -------- footer -------- */
+    .footer{
+      background:var(--ink);color:#E9E9E1;
+      margin-top:clamp(40px,6vw,80px);
+      border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+      padding:clamp(48px,6vw,80px) 0 0;
+      position:relative;overflow:hidden;
+    }
+    .footer::before{
+      content:"";position:absolute;left:-10%;top:-30%;
+      width:60%;height:60%;
+      background:radial-gradient(closest-side,rgba(236,246,160,.10),transparent 70%);
+      pointer-events:none;
+    }
+    .footer .wrap{position:relative}
+    .footer-top{
+      display:grid;grid-template-columns:1.2fr 1fr 1fr 1.1fr;
+      gap:clamp(24px,3vw,48px);
+      padding-bottom:clamp(40px,4vw,56px);
+    }
+    .footer-brand .logo{display:inline-flex;align-items:center;margin-bottom:18px}
+    .footer-brand .logo img{height:26px;filter:invert(1) brightness(1.2)}
+    .footer-brand p{font-size:14px;color:var(--muted-on-dark);max-width:32ch;margin:0 0 18px;line-height:1.55}
+    .footer-brand .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;border:1px solid var(--line-on-dark);border-radius:999px;
+      font-size:12px;color:#fff;font-weight:500;letter-spacing:.04em;
+    }
+    .footer-brand .pill .dot{width:6px;height:6px;border-radius:999px;background:var(--yellow);display:inline-block}
+
+    .footer-col h4{
+      font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase;
+      margin:0 0 16px;color:#fff;
+    }
+    .footer-col ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+    .footer-col a{font-size:15px;color:var(--muted-on-dark);transition:color .2s}
+    .footer-col a:hover{color:#fff}
+    .footer-col .addr{font-size:15px;color:var(--muted-on-dark);line-height:1.55;font-style:normal;margin:0}
+    .footer-col .addr strong{color:#fff;font-weight:600;display:block;margin-bottom:6px}
+
+    .footer-bottom{
+      border-top:1px solid var(--line-on-dark);
+      padding:24px 0;display:flex;align-items:center;justify-content:space-between;
+      gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted-on-dark);
+    }
+    .footer-bottom .legal{max-width:80ch;line-height:1.5}
+    .footer-bottom .copy{white-space:nowrap}
+    .footer-bottom nav{display:flex;gap:18px}
+    .footer-bottom nav a{color:var(--muted-on-dark)}
+    .footer-bottom nav a:hover{color:#fff}
+
+    @media (max-width: 920px){
+      .footer-top{grid-template-columns:1fr 1fr}
+      .footer-brand{grid-column:1/-1}
+    }
+    @media (max-width: 560px){
+      .footer-top{grid-template-columns:1fr;gap:32px}
+      .footer-brand{grid-column:auto}
+      .footer-bottom{flex-direction:column;align-items:flex-start}
+    }
+
+    /* -------- sticky CTA -------- */
+    .sticky-cta{
+      position:fixed;left:50%;bottom:22px;transform:translate(-50%,32px);
+      z-index:60;opacity:0;pointer-events:none;
+      transition:opacity .3s ease, transform .35s ease;
+    }
+    .sticky-cta.is-on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+    .sticky-cta .btn{
+      background:var(--yellow);color:var(--ink);
+      padding:20px 30px;font-size:17px;font-weight:700;
+      border:2px solid var(--ink);
+      box-shadow:0 14px 30px -10px rgba(10,10,10,.45),0 4px 14px -6px rgba(10,10,10,.3);
+      animation:stickyPulse 2.2s ease-in-out infinite;
+    }
+    .sticky-cta .btn:hover{
+      background:var(--yellow-deep);transform:translateY(-2px);
+      animation:none;
+    }
+    .sticky-cta .btn .arrow{background:var(--ink);color:var(--yellow)}
+    @keyframes stickyPulse{
+      0%,100%{box-shadow:0 14px 30px -10px rgba(10,10,10,.45),0 4px 14px -6px rgba(10,10,10,.3),0 0 0 0 rgba(236,246,160,.7)}
+      50%   {box-shadow:0 14px 30px -10px rgba(10,10,10,.45),0 4px 14px -6px rgba(10,10,10,.3),0 0 0 14px rgba(236,246,160,0)}
+    }
+    @media (max-width:520px){
+      .sticky-cta{left:12px;right:12px;bottom:12px;transform:translateY(32px)}
+      .sticky-cta.is-on{transform:translateY(0)}
+      .sticky-cta .btn{width:100%;justify-content:center;padding:18px 22px;font-size:16px}
+    }
+
+    /* -------- helpers -------- */
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s ease, transform .8s ease}
+    .reveal.in{opacity:1;transform:none}
+    .nowrap{white-space:nowrap}
+
+  </style>
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="wrap inner">
+      <a class="logo" href="#top" aria-label="Educaty">
+        <img src="assets/img/logo.png" alt="Educaty" />
+      </a>
+      <nav>
+        <a href="#masterclass">Мастер-класс</a>
+        <a href="#program">Программа</a>
+        <a href="#audience">Кому подойдёт</a>
+        <a href="#community">Комьюнити</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <div class="right">
+        <a class="phone" href="tel:+78123855230">+7 812 385‑52‑30</a>
+        <a class="btn btn-primary cta" href="#masterclass">
+          Бесплатный мастер-класс в Петербурге
+          <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <main id="top">
+  <section class="hero">
+    <div class="wrap grid">
+      <div class="hero-main">
+        <span class="eyebrow"><span class="dot"></span>AI-школа Educaty · Петербург · поток весна 2026</span>
+        <h1 class="display">
+          <span class="first">Я — креатор.</span><br/>
+          <span class="accent">AI — креатор.</span>
+        </h1>
+        <p class="sub">Создавай контент мирового уровня без камер, съёмок и границ. Один ноутбук, один курс — и навыки, которые работают на тебя каждый день.</p>
+        <div class="ctas">
+          <a class="btn btn-primary" href="#masterclass">
+            Начать с бесплатного мастер-класса
+            <span class="arrow">→</span>
+          </a>
+          <a class="btn btn-ghost" href="#program">Посмотреть программу</a>
+        </div>
+      </div>
+
+      <aside class="hero-side">
+        <figure class="hero-video">
+          <video src="assets/showcase/miu-miu.mp4" poster="assets/showcase/miu-miu_poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
+        </figure>
+      </aside>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>AI-КРЕАТОР<i class="dot"></i>БЕЗ КАМЕР<i class="dot"></i>БЕЗ СЪЁМОК<i class="dot"></i>БЕЗ ГРАНИЦ<i class="dot"></i>КОНТЕНТ МИРОВОГО УРОВНЯ<i class="dot"></i></span>
+      <span>AI-КРЕАТОР<i class="dot"></i>БЕЗ КАМЕР<i class="dot"></i>БЕЗ СЪЁМОК<i class="dot"></i>БЕЗ ГРАНИЦ<i class="dot"></i>КОНТЕНТ МИРОВОГО УРОВНЯ<i class="dot"></i></span>
+    </div>
+  </div>
+
+  <!-- AI SHOWCASE -->
+  <section id="showcase" style="padding-bottom:clamp(40px,5vw,72px)">
+    <div class="wrap">
+      <div class="showcase-head">
+        <div>
+          <span class="eyebrow"><span class="dot"></span>Контент уровня Vogue, не выходя из дома</span>
+          <h2>Это всё сделано на ноутбуке. Без камер, моделей и съёмочных групп.</h2>
+        </div>
+        <p class="lead">Подборка работ, которые наши ученики и преподаватели собирают на курсе. Кампании для брендов, фэшн-съёмки, рекламные ролики — каждая создана нейросетью под управлением человека.</p>
+      </div>
+
+      <div class="showcase">
+        <figure class="sh sh-1" data-tool="Midjourney">
+          <img src="assets/showcase/ai_1.jpg" alt="AI-съёмка в зелёном лабиринте" loading="lazy" />
+        </figure>
+        <figure class="sh sh-2" data-tool="Veo · видео">
+          <video src="assets/showcase/ai_2.mp4" poster="assets/showcase/ai_2_poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
+        </figure>
+        <figure class="sh sh-3" data-tool="Nano Banana">
+          <img src="assets/showcase/ai_2.jpg" alt="Кампания Gucci, AI-генерация" loading="lazy" />
+        </figure>
+        <figure class="sh sh-4" data-tool="Flux">
+          <img src="assets/showcase/ai_3.jpg" alt="Фэшн-съёмка с альпакой, AI" loading="lazy" />
+        </figure>
+        <figure class="sh sh-5" data-tool="Kling · видео">
+          <video src="assets/showcase/hearts.mp4" poster="assets/showcase/hearts_poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
+        </figure>
+        <figure class="sh sh-6" data-tool="Midjourney">
+          <img src="assets/showcase/ai_4.jpg" alt="Сёрф-кампания, AI-генерация" loading="lazy" />
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- MASTERCLASS -->
+  <section id="masterclass">
+    <div class="wrap">
+      <div class="mc">
+        <div class="grid">
+          <div class="mc-info">
+            <div class="badges">
+              <span class="badge">Бесплатно · оффлайн</span>
+              <span class="badge alt">Камерный формат · мест мало</span>
+            </div>
+            <h2>Бесплатный мастер-класс в AI-студии Educaty.</h2>
+            <p class="lead">В самом сердце Петроградки. Уютная студия в 1 минуте от метро Петроградская: стильный дизайн и уникальный вид на театр им. Андрея Миронова. Место, где можно по-настоящему окунуться в мир новых технологий и креатива, пообщаться с интересными людьми и провести время с пользой.</p>
+
+            <div class="mc-meta">
+              <div class="it">
+                <span class="k">Адрес</span>
+                <span class="v">м. Петроградская<br/>Каменноостровский пр., 38/96</span>
+              </div>
+              <div class="it">
+                <span class="k">Длительность</span>
+                <span class="v">1–1,5 часа<br/>лекция с интерактивом</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mc-form" id="mcFormWrap">
+            <h3>Записаться на мастер-класс</h3>
+            <p class="lead-sm">Оставьте контакты — свяжемся и подберём ближайшую удобную дату.</p>
+            <form id="form-mc" novalidate>
+              <input type="hidden" name="form_name" value="ai-creator-masterclass" />
+              <div class="row">
+                <input type="text" name="Name" placeholder="Меня зовут" autocomplete="name" required />
+                <input type="tel" name="Phone" id="mcPhone" placeholder="+7 (___) ___-__-__" autocomplete="tel" inputmode="tel" required />
+              </div>
+              <button class="btn btn-primary" type="submit">
+                Подать заявку
+                <span class="arrow">→</span>
+              </button>
+              <span class="hint">Подберём занятие, удобное по времени</span>
+              <span class="small">Нажимая, вы соглашаетесь с обработкой персональных данных.</span>
+            </form>
+            <div class="ok">
+              <h4>Заявка принята!</h4>
+              <p>Свяжемся с вами в течение дня и подберём удобное время для мастер-класса.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mc-photos" aria-hidden="true">
+          <figure><img src="assets/photos/mk-energy.jpg" alt="Студенты на мастер-классе" /></figure>
+          <figure><img src="assets/photos/mk-group.jpg" alt="Группа учеников за работой с куратором" /></figure>
+          <figure><img src="assets/photos/mk-focus.jpg" alt="Студенты в студии Educaty" /></figure>
+          <figure><img src="assets/photos/mk-screen.jpg" alt="Подбор референсов на ноутбуке" /></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT / CAPABILITIES -->
+  <section id="about">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow"><span class="dot"></span>Что ты сможешь после обучения</span>
+          <h2>Контент, который раньше делала команда — теперь твоя суперсила.</h2>
+        </div>
+        <p class="lead">Этот курс не про «попробовать Nano Banana или Kling». Это про то, как собирать видео, фото и тексты на уровне топ-студий — каждый день и без выгорания.</p>
+      </div>
+
+      <div class="caps">
+        <article class="cap span-8 ink">
+          <div class="num">01 / Видео</div>
+          <h3>Снимай ролики, не вставая из-за стола.</h3>
+          <p>Сценарий, виртуальный актёр, голос, монтаж и субтитры — собираешь полноценный ролик за один вечер с помощью связки AI-инструментов.</p>
+          <span class="tag">Veo · Kling · Runway · ElevenLabs · CapCut</span>
+        </article>
+        <article class="cap span-4">
+          <div class="num">02 / Фото</div>
+          <h3>Студийные кадры из ничего.</h3>
+          <p>Генерируй фотосессии, обложки для бренда за 10 минут.</p>
+          <span class="tag">Midjourney · Nano Banana · Flux</span>
+        </article>
+        <article class="cap span-4">
+          <div class="num">03 / Текст</div>
+          <h3>Тексты, которые читают.</h3>
+          <p>Сценарии, посты, рассылки и лендинги — в твоём голосе, а не в голосе бота.</p>
+          <span class="tag">Claude · GPT · Gemini</span>
+        </article>
+        <article class="cap span-8">
+          <div class="num">04 / Система</div>
+          <h3>Контент-конвейер, который работает за тебя.</h3>
+          <p>Соберём личный AI-стек: от идеи до публикации. Один промпт — один пост. Один шаблон — десять Reels. Одна связка — постоянный поток рилсов, видео и сторис без копирайтера и видеомонтажёра.</p>
+          <span class="tag">Notion · Make · n8n · Telegram</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- СЕРИЯ — horizontal storyline -->
+  <section id="seria" style="padding-top:0">
+    <div class="wrap">
+      <div class="seria">
+        <div class="seria-head">
+          <div>
+            <span class="eyebrow on-dark"><span class="dot"></span>Кейс · цельная серия</span>
+            <h2>Фэшн-показ в пустыне, который никто не снимал.</h2>
+          </div>
+          <p class="lead">Полноценная редакторская история — 13 кадров и видео — собранная на AI-стеке за выходные. Покажем на курсе, как делать такие проекты для брендов и для себя.</p>
+        </div>
+
+        <div class="seria-rail" id="seriaRail">
+          <figure class="tall"><video src="assets/seria/seria.mp4" poster="assets/seria/seria_poster.jpg" autoplay muted loop playsinline preload="metadata"></video></figure>
+          <figure><img src="assets/seria/s_1.jpg" alt="Серия 1" loading="lazy" /></figure>
+          <figure class="tall"><img src="assets/seria/s_2.jpg" alt="Серия 2" loading="lazy" /></figure>
+          <figure><img src="assets/seria/s_3.jpg" alt="Серия 3" loading="lazy" /></figure>
+          <figure class="tall"><img src="assets/seria/s_5.jpg" alt="Серия 5" loading="lazy" /></figure>
+          <figure><img src="assets/seria/s_6.jpg" alt="Серия 6" loading="lazy" /></figure>
+          <figure><img src="assets/seria/s_7.jpg" alt="Серия 7" loading="lazy" /></figure>
+          <figure class="tall"><img src="assets/seria/s_8.jpg" alt="Серия 8" loading="lazy" /></figure>
+          <figure><img src="assets/seria/s_9.jpg" alt="Серия 9" loading="lazy" /></figure>
+          <figure><img src="assets/seria/s_10.jpg" alt="Серия 10" loading="lazy" /></figure>
+          <figure class="tall"><img src="assets/seria/s_11.jpg" alt="Серия 11" loading="lazy" /></figure>
+          <figure><img src="assets/seria/s_12.jpg" alt="Серия 12" loading="lazy" /></figure>
+          <figure><img src="assets/seria/s_13.jpg" alt="Серия 13" loading="lazy" /></figure>
+          <figure><img src="assets/seria/s_4.jpg" alt="Серия 4" loading="lazy" /></figure>
+        </div>
+
+        <div class="seria-bar">
+          <span class="hint">↦ листайте серию</span>
+          <span class="line" id="seriaProgress"><span></span></span>
+          <span class="hint nowrap">14 кадров</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRAM -->
+  <section id="program">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow"><span class="dot"></span>Программа</span>
+          <h2>6 модулей. От первой нейросети — до собственного контент-конвейера.</h2>
+        </div>
+        <p class="lead">Каждую неделю — новый модуль, живая встреча с куратором, домашка с разбором. На выходе — портфолио и готовая система производства контента.</p>
+      </div>
+
+      <div class="program">
+        <div class="row">
+          <div class="num">01</div>
+          <div>
+            <div class="ttl">Мышление AI-креатора</div>
+            <div class="desc">Как смотреть на любой контент глазами режиссёра, дизайнера и продюсера одновременно. Карта инструментов и личный AI-стек.</div>
+          </div>
+          <div class="meta">Неделя 1 · 4 урока</div>
+        </div>
+        <div class="row">
+          <div class="num">02</div>
+          <div>
+            <div class="ttl">Тексты, сценарии, голос бренда</div>
+            <div class="desc">Промпты, которые работают. Шаблоны для постов, Reels и рассылок. Как не звучать как нейросеть.</div>
+          </div>
+          <div class="meta">Неделя 2 · 5 уроков</div>
+        </div>
+        <div class="row">
+          <div class="num">03</div>
+          <div>
+            <div class="ttl">Фото и обложки уровня премиум</div>
+            <div class="desc">Midjourney, Nano Banana, Flux. Свой стиль, фирменная палитра, обложки для Reels, YouTube и подкастов.</div>
+          </div>
+          <div class="meta">Неделя 3 · 6 уроков</div>
+        </div>
+        <div class="row">
+          <div class="num">04</div>
+          <div>
+            <div class="ttl">Видео без камеры</div>
+            <div class="desc">Veo, Kling, Runway. Сценарий → раскадровка → видео → монтаж → озвучка. Делаем первый ролик уровня топ-блогеров.</div>
+          </div>
+          <div class="meta">Неделя 4 · 6 уроков</div>
+        </div>
+        <div class="row">
+          <div class="num">05</div>
+          <div>
+            <div class="ttl">Личный аватар и AI-актёр</div>
+            <div class="desc">Создаём цифровую копию для Reels, рекламных роликов и обучения. Аватар, голос, поведение в кадре.</div>
+          </div>
+          <div class="meta">Неделя 5 · 4 урока</div>
+        </div>
+        <div class="row">
+          <div class="num">06</div>
+          <div>
+            <div class="ttl">Контент-конвейер</div>
+            <div class="desc">Собираем систему: 30 единиц контента в месяц без выгорания. Notion, Make, n8n и Telegram — на твоей стороне.</div>
+          </div>
+          <div class="meta">Неделя 6 · 5 уроков</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUDIENCE -->
+  <section id="audience">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow"><span class="dot"></span>Кому подойдёт</span>
+          <h2>Курс — для тех, кому контент нужен каждый день.</h2>
+        </div>
+        <p class="lead">Не нужны опыт в дизайне или съёмке. Нужны ноутбук, желание разобраться и пара часов в день.</p>
+      </div>
+
+      <div class="audience">
+        <article class="who">
+          <div class="icon">B</div>
+          <h3>Блогерам и экспертам</h3>
+          <p>Чтобы выпускать Reels и YouTube-ролики каждый день и не зависеть от съёмочной группы.</p>
+          <ul>
+            <li>Идеи, сценарии и сторителлинг</li>
+            <li>Аватары и AI-голос</li>
+            <li>Личный стиль на обложках</li>
+          </ul>
+        </article>
+        <article class="who alt">
+          <div class="icon">P</div>
+          <h3>Предпринимателям и руководителям</h3>
+          <p>Сократить расходы на маркетинг в разы и получать качественный контент без агентств и команды.</p>
+          <ul>
+            <li>Кампании, лендинги и лид-магниты</li>
+            <li>Презентации и питч-деки за вечер</li>
+            <li>Контент-стратегия для команды</li>
+          </ul>
+        </article>
+        <article class="who">
+          <div class="icon">M</div>
+          <h3>Маркетологам и брендам</h3>
+          <p>Делать рекламу и контент быстрее, чем агентство — и в 10 раз дешевле.</p>
+          <ul>
+            <li>Кампании под ключ за день</li>
+            <li>Виртуальные модели и продукты</li>
+            <li>Контент в едином стиле бренда</li>
+          </ul>
+        </article>
+        <article class="who alt">
+          <div class="icon">C</div>
+          <h3>Креаторам и дизайнерам</h3>
+          <p>Собрать AI-стек, на котором можно зарабатывать кратно больше — и спокойнее.</p>
+          <ul>
+            <li>Связки инструментов под клиента</li>
+            <li>Шаблоны и автоматизация</li>
+            <li>Портфолио уровня студий</li>
+          </ul>
+        </article>
+        <article class="who">
+          <div class="icon">A</div>
+          <h3>Будущим AI-креаторам</h3>
+          <p>Освой профессию, на которой можно зарабатывать на заказном контенте для брендов и блогеров.</p>
+          <ul>
+            <li>Полная программа с нуля</li>
+            <li>Реальные коммерческие кейсы</li>
+            <li>База клиентов и шаблоны цен</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI-COMMUNITY -->
+  <section id="community">
+    <div class="wrap">
+      <div class="community-head">
+        <div>
+          <span class="eyebrow"><span class="dot"></span>AI-комьюнити Educaty</span>
+          <h2>Не только курс. Живое комьюнити единомышленников.</h2>
+        </div>
+        <p class="lead">Помимо онлайн-занятий, мы проводим лекции и мероприятия в офлайн- и онлайн-форматах. Это уникальная возможность обменяться опытом, найти единомышленников и вдохновиться новыми идеями.</p>
+      </div>
+
+      <div class="community">
+        <figure class="cm cm-1 live">
+          <video src="assets/community/educaty.mp4" poster="assets/community/educaty_poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
+          <span class="label"><span class="dot"></span>Вечеринки Educaty</span>
+        </figure>
+        <figure class="cm cm-2">
+          <img src="assets/community/c_5.jpg" alt="Сообщество Educaty на встрече" loading="lazy" />
+          <span class="label"><span class="dot"></span>Лекции и нетворкинг</span>
+        </figure>
+        <figure class="cm cm-3">
+          <img src="assets/community/c_1.jpg" alt="Гости вечеринки Educaty" loading="lazy" />
+        </figure>
+        <figure class="cm cm-4">
+          <img src="assets/community/c_2.jpg" alt="Участники мероприятия Educaty" loading="lazy" />
+        </figure>
+        <figure class="cm cm-5">
+          <img src="assets/community/c_8.jpg" alt="Встреча комьюнити Educaty" loading="lazy" />
+        </figure>
+        <figure class="cm cm-6">
+          <img src="assets/community/c_7.jpg" alt="Участница комьюнити" loading="lazy" />
+        </figure>
+        <figure class="cm cm-7">
+          <img src="assets/community/c_4.jpg" alt="Гостья мероприятия Educaty" loading="lazy" />
+        </figure>
+      </div>
+
+      <div class="community-meta">
+        <span class="pill"><span class="dot"></span>Лекции с приглашёнными спикерами</span>
+        <span class="pill"><span class="dot"></span>Тематические вечеринки</span>
+        <span class="pill"><span class="dot"></span>Офлайн в Петербурге + онлайн</span>
+        <span class="pill"><span class="dot"></span>Бесплатно для учеников курса</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow"><span class="dot"></span>FAQ</span>
+          <h2>Частые вопросы.</h2>
+        </div>
+      </div>
+
+      <div class="faq">
+        <details open>
+          <summary>Подойдёт ли курс новичку без опыта?</summary>
+          <div class="a">Да. Мы стартуем с базы: какой инструмент когда применять, как формулировать запросы, как собирать связки. К пятой неделе ты уверенно делаешь то, что раньше казалось магией.</div>
+        </details>
+        <details>
+          <summary>Сколько времени нужно в неделю?</summary>
+          <div class="a">3–5 часов: уроки в записи + одна живая встреча + домашка. Можно проходить в своём темпе и догонять группу.</div>
+        </details>
+        <details>
+          <summary>Какие инструменты понадобятся?</summary>
+          <div class="a">Ноутбук, стабильный интернет и аккаунты в основных AI-сервисах. Платные подписки нужны не на всё — мы расскажем, что обязательно, а где хватит бесплатного тарифа.</div>
+        </details>
+        <details>
+          <summary>Дадите ли домашки разбирать лично?</summary>
+          <div class="a">Да. Куратор разбирает работы каждую неделю — на живой встрече и в чате. Это то, ради чего стоит идти в группу, а не учиться по YouTube.</div>
+        </details>
+        <details>
+          <summary>Что я получу на выходе?</summary>
+          <div class="a">Портфолио из 7 проектов, личный AI-стек в Notion, готовые промпт-шаблоны и систему, которая стабильно выдаёт контент 30 дней в месяц.</div>
+        </details>
+        <details>
+          <summary>А если мне не подойдёт?</summary>
+          <div class="a">В первые 7 дней курса можно вернуть деньги без вопросов. Бесплатный мастер-класс — отличный способ понять, твой это формат или нет.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section>
+    <div class="wrap">
+      <div class="final">
+        <span class="eyebrow on-dark"><span class="dot"></span>Готов?</span>
+        <h2>Создавай контент мирового уровня. Без камер, съёмок и границ.</h2>
+        <p>Начни с бесплатного мастер-класса в AI-студии Educaty на Петроградке. Если зайдёт — продолжим вместе на курсе.</p>
+        <div class="ctas">
+          <a class="btn btn-yellow" href="#masterclass">
+            Записаться на мастер-класс
+            <span class="arrow">→</span>
+          </a>
+          <a class="btn btn-ghost-light" href="#program">К программе</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a class="logo" href="#top"><img src="assets/img/logo.png" alt="Educaty" /></a>
+          <p>AI-школа Educaty: учим создавать контент мирового уровня без камер, съёмок и границ.</p>
+          <span class="pill"><span class="dot"></span>Санкт-Петербург</span>
+        </div>
+
+        <div class="footer-col">
+          <h4>Курс</h4>
+          <ul>
+            <li><a href="#masterclass">Бесплатный мастер-класс</a></li>
+            <li><a href="#showcase">Что создают на курсе</a></li>
+            <li><a href="#program">Программа</a></li>
+            <li><a href="#audience">Кому подойдёт</a></li>
+            <li><a href="#faq">Частые вопросы</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Контакты</h4>
+          <ul>
+            <li><a href="mailto:hello@educaty.ru">hello@educaty.ru</a></li>
+            <li><a href="tel:+78123855230">+7 (812) 385-52-30</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Адрес</h4>
+          <address class="addr">
+            <strong>AI-школа Educaty</strong>
+            Санкт-Петербург,<br/>
+            Каменноостровский пр., 38/96<br/>
+            м. Петроградская
+          </address>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span class="copy">© 2026 Educaty</span>
+        <span class="legal">Оказание услуг осуществляется: ИП Анисимов Д.А., ОГРНИП 315784700226613</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- STICKY CTA -->
+  <div class="sticky-cta" id="stickyCta" aria-hidden="true">
+    <a class="btn btn-primary" href="#masterclass">
+      Начать с бесплатного мастер-класса
+      <span class="arrow">→</span>
+    </a>
+  </div>
+
+  <script>
+    // -------- reveal on scroll --------
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    },{threshold:.12, rootMargin:"0px 0px -40px 0px"});
+    document.querySelectorAll('.section-head, .cap, .who, .mc, .program .row, .final, .hero-card, .stat, .sh, .seria').forEach(el=>{
+      el.classList.add('reveal'); io.observe(el);
+    });
+
+    // -------- phone mask (RU +7) --------
+    (function(){
+      const inp = document.getElementById('mcPhone');
+      if(!inp) return;
+      const setVal = v => { inp.value = v; };
+      function format(raw){
+        // оставить только цифры
+        let d = raw.replace(/\D/g,'');
+        if(d.startsWith('8')) d = '7' + d.slice(1);
+        if(!d.startsWith('7')) d = '7' + d;
+        d = d.slice(0,11);
+        const a = d.slice(1,4), b = d.slice(4,7), c = d.slice(7,9), e = d.slice(9,11);
+        let out = '+7';
+        if(a) out += ' (' + a + (a.length===3 ? ')' : '');
+        if(b) out += ' ' + b;
+        if(c) out += '-' + c;
+        if(e) out += '-' + e;
+        return out;
+      }
+      function onInput(){ setVal(format(inp.value)); }
+      inp.addEventListener('focus', () => { if(!inp.value) setVal('+7 ('); });
+      inp.addEventListener('input', onInput);
+      inp.addEventListener('paste', e => { setTimeout(onInput,0); });
+      inp.addEventListener('blur', () => { if(inp.value === '+7 (' || inp.value === '+7') inp.value=''; });
+    })();
+
+    // -------- form submit: POST в свой webhook (см. SETUP.md) --------
+    // ВАЖНО: укажите URL вашего lead-forwarder (Cloudflare Worker / Vercel и т.п.).
+    // Готовый код прослойки + инструкция — в файле SETUP.md.
+    const LEAD_ENDPOINT = "https://YOUR-LEAD-FORWARDER-URL.workers.dev";
+
+    (function(){
+      const wrap = document.getElementById('mcFormWrap');
+      const form = document.getElementById('form-mc');
+      if(!form) return;
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = form.querySelector('button[type="submit"]');
+        const original = btn.innerHTML;
+        btn.disabled = true; btn.innerHTML = 'Отправляем…';
+
+        const data = {
+          name: form.Name.value.trim(),
+          phone: form.Phone.value.trim(),
+          form: 'ai-creator-masterclass',
+          page: location.href,
+          ts:   new Date().toISOString(),
+          utm:  Object.fromEntries(new URLSearchParams(location.search).entries()),
+        };
+
+        try {
+          if (LEAD_ENDPOINT && !/YOUR-LEAD-FORWARDER-URL/.test(LEAD_ENDPOINT)) {
+            await fetch(LEAD_ENDPOINT, {
+              method: 'POST',
+              headers: {'Content-Type':'application/json'},
+              body: JSON.stringify(data),
+              mode: 'cors',
+            });
+          } else {
+            console.log('[lead] (endpoint не задан, лог в консоль):', data);
+          }
+          wrap.classList.add('is-sent');
+        } catch(err){
+          console.error('[lead] ошибка:', err);
+          // даже если webhook упал — покажем "принято", чтобы не терять конверсию,
+          // а лид можно достать из логов воркера / amoCRM
+          wrap.classList.add('is-sent');
+        } finally {
+          btn.disabled = false; btn.innerHTML = original;
+        }
+      });
+    })();
+
+    // -------- sticky CTA: показываем после блока мастер-класса --------
+    (function(){
+      const cta = document.getElementById('stickyCta');
+      const mc  = document.getElementById('masterclass');
+      if(!cta || !mc) return;
+      function check(){
+        const r = mc.getBoundingClientRect();
+        // показываем когда низ блока МК ушёл выше 80% высоты экрана
+        const passed = r.bottom < window.innerHeight * 0.2;
+        // и не показываем на самом верху страницы
+        const scrolled = window.scrollY > 200;
+        cta.classList.toggle('is-on', passed && scrolled);
+        cta.setAttribute('aria-hidden', (passed && scrolled) ? 'false' : 'true');
+      }
+      window.addEventListener('scroll', check, {passive:true});
+      window.addEventListener('resize', check);
+      check();
+    })();
+
+    // -------- progress bar for Серия rail --------
+    (function(){
+      const rail = document.getElementById('seriaRail');
+      const bar  = document.querySelector('#seriaProgress span') ||
+                   document.querySelector('#seriaProgress::after');
+      if(!rail) return;
+      const fill = document.querySelector('#seriaProgress')?.querySelector('span');
+      // simpler: animate ::after via CSS variable
+      function upd(){
+        const max = rail.scrollWidth - rail.clientWidth;
+        const p = max>0 ? rail.scrollLeft / max : 0;
+        const line = document.getElementById('seriaProgress');
+        if(line) line.style.setProperty('--p', p);
+      }
+      rail.addEventListener('scroll', upd, {passive:true});
+      window.addEventListener('resize', upd);
+      upd();
+    })();
+  </script>
+
+  <!-- progress bar dynamic styling for Серия -->
+  <style>
+    #seriaProgress::after{
+      width: calc(18% + 60% * var(--p,0));
+      left: calc(40% * var(--p,0));
+    }
+  </style>
+</body>
+</html>
