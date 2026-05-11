@@ -405,19 +405,19 @@
     @media (max-width: 520px){
       .showcase{
         grid-template-columns:repeat(2,1fr);
-        grid-auto-rows:56px;
-        grid-auto-flow:row dense;
-        gap:8px;
+        grid-auto-rows:auto;
+        gap:12px;
       }
       .sh, [class^="sh-"]{grid-column:auto;grid-row:auto;aspect-ratio:auto}
-      /* photos — 2 колонки с разной высотой для живой сетки */
-      .sh-1{grid-column:1;grid-row:span 7}
-      .sh-3{grid-column:2;grid-row:span 5}
-      .sh-4{grid-column:1;grid-row:span 5}
-      .sh-6{grid-column:2;grid-row:span 6}
-      /* videos — на всю ширину */
-      .sh-2{grid-column:1/-1;grid-row:span 4}
-      .sh-5{grid-column:1/-1;grid-row:span 4}
+      /* Пара 1 — первые два фото */
+      .sh-1{grid-column:1;grid-row:1;aspect-ratio:3/4}
+      .sh-3{grid-column:2;grid-row:1;aspect-ratio:3/4}
+      /* Пара 2 — последние два фото, чуть выше для живой сетки */
+      .sh-4{grid-column:1;grid-row:2;aspect-ratio:4/5}
+      .sh-6{grid-column:2;grid-row:2;aspect-ratio:4/5}
+      /* Видео — в самом конце, на всю ширину */
+      .sh-2{grid-column:1/-1;grid-row:3;aspect-ratio:16/10}
+      .sh-5{grid-column:1/-1;grid-row:4;aspect-ratio:16/10}
     }
 
     /* -------- Серия (horizontal scroll) -------- */
@@ -556,21 +556,22 @@
     @media (max-width: 520px){
       .community{
         grid-template-columns:repeat(2,1fr);
-        grid-auto-rows:56px;
-        grid-auto-flow:row dense;
-        gap:8px;
+        grid-auto-rows:auto;
+        gap:12px;
       }
       .cm, [class^="cm-"]{grid-column:auto;grid-row:auto;aspect-ratio:auto}
-      /* video — full width */
-      .cm-1{grid-column:1/-1;grid-row:span 4}
-      /* фото в 2 колонки с разной высотой — нарушаем «ровную» сетку */
-      .cm-2{grid-column:1;grid-row:span 6}
-      .cm-3{grid-column:2;grid-row:span 5}
-      .cm-4{grid-column:2;grid-row:span 5}
-      .cm-5{grid-column:1;grid-row:span 5}
-      .cm-6{grid-column:1;grid-row:span 6}
-      .cm-7{grid-column:2;grid-row:span 6}
-      /* «Лекции и нетворкинг» — длинная плашка не помещается на узких фото */
+      /* Видео — на всю ширину */
+      .cm-1{grid-column:1/-1;grid-row:1;aspect-ratio:16/10}
+      /* Пара 1 — слегка разной высоты для живой сетки */
+      .cm-2{grid-column:1;grid-row:2;aspect-ratio:3/4}
+      .cm-3{grid-column:2;grid-row:2;aspect-ratio:4/5}
+      /* Пара 2 — высоты «инвертированы» — создаёт ритм */
+      .cm-4{grid-column:1;grid-row:3;aspect-ratio:4/5}
+      .cm-5{grid-column:2;grid-row:3;aspect-ratio:3/4}
+      /* Пара 3 */
+      .cm-6{grid-column:1;grid-row:4;aspect-ratio:3/4}
+      .cm-7{grid-column:2;grid-row:4;aspect-ratio:4/5}
+      /* «Лекции и нетворкинг» — длинная плашка не помещается */
       .cm-2 .label{display:none}
     }
 
@@ -761,8 +762,8 @@
   <!-- MARQUEE -->
   <div class="marquee" aria-hidden="true">
     <div class="marquee-track">
-      <span>AI-КРЕАТОР<i class="dot"></i>БЕЗ КАМЕР<i class="dot"></i>БЕЗ СЪЁМОК<i class="dot"></i>БЕЗ ГРАНИЦ<i class="dot"></i>КОНТЕНТ МИРОВОГО УРОВНЯ<i class="dot"></i></span>
-      <span>AI-КРЕАТОР<i class="dot"></i>БЕЗ КАМЕР<i class="dot"></i>БЕЗ СЪЁМОК<i class="dot"></i>БЕЗ ГРАНИЦ<i class="dot"></i>КОНТЕНТ МИРОВОГО УРОВНЯ<i class="dot"></i></span>
+      <span>MIDJOURNEY<i class="dot"></i>CLAUDE<i class="dot"></i>NANO BANANA<i class="dot"></i>FLUX<i class="dot"></i>CAPCUT<i class="dot"></i>GPT<i class="dot"></i>VEO<i class="dot"></i>KLING<i class="dot"></i>ELEVENLABS<i class="dot"></i>GEMINI<i class="dot"></i></span>
+      <span>MIDJOURNEY<i class="dot"></i>CLAUDE<i class="dot"></i>NANO BANANA<i class="dot"></i>FLUX<i class="dot"></i>CAPCUT<i class="dot"></i>GPT<i class="dot"></i>VEO<i class="dot"></i>KLING<i class="dot"></i>ELEVENLABS<i class="dot"></i>GEMINI<i class="dot"></i></span>
     </div>
   </div>
 
@@ -1200,7 +1201,7 @@
         <div class="footer-col">
           <h4>Контакты</h4>
           <ul>
-            <li><a href="mailto:hello@educaty.ru">hello@educaty.ru</a></li>
+            <li><a href="mailto:hello@educaty.com">hello@educaty.com</a></li>
             <li><a href="tel:+78123855230">+7 (812) 385-52-30</a></li>
           </ul>
         </div>
