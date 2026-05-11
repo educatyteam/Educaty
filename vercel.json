@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/spb",
+      "destination": "/",
+      "permanent": false
+    }
+  ]
+}
