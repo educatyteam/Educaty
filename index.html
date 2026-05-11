@@ -96,6 +96,12 @@
       background:var(--yellow);color:var(--ink);font-size:14px;font-weight:700;
     }
     .btn-yellow .arrow{background:var(--ink);color:var(--yellow)}
+    /* short label swap: показываем .lbl-sm вместо .lbl на мобильной */
+    .btn .lbl-sm{display:none}
+    @media (max-width: 520px){
+      .btn-yellow .lbl{display:none}
+      .btn-yellow .lbl-sm{display:inline}
+    }
 
     /* -------- topbar -------- */
     .topbar{
@@ -152,13 +158,17 @@
     .hero h1 .accent{
       position:relative;display:inline-block;
       color:var(--ink);font-weight:800;font-style:italic;
-      padding:0 .04em .08em;line-height:.95;max-width:100%;
+      padding:0 .04em .22em;line-height:.95;max-width:100%;
     }
-    .hero h1 .accent::after{
-      content:"";position:absolute;
-      left:.04em;right:.04em;bottom:.02em;
-      height:.12em;background:var(--ink);border-radius:999px;
-      transform:skewX(-10deg);
+    .hero h1 .accent svg{
+      position:absolute;left:0;right:0;bottom:.02em;
+      width:100%;height:.22em;
+      display:block;overflow:visible;
+      pointer-events:none;
+    }
+    .hero h1 .accent svg path{
+      stroke:var(--ink);stroke-width:6;stroke-linecap:round;fill:none;
+      vector-effect:non-scaling-stroke;
     }
     .hero .sub{
       font-size:clamp(17px,1.4vw,20px);max-width:44ch;color:var(--ink);opacity:.82;
@@ -359,6 +369,7 @@
       gap:14px;
     }
     .sh{
+      margin:0;
       position:relative;border-radius:24px;overflow:hidden;background:#0F0F0F;
       transition:transform .8s cubic-bezier(.2,.8,.2,1);
       will-change:transform;
@@ -392,11 +403,21 @@
       .sh-8{grid-column:1/7;grid-row:span 5}
     }
     @media (max-width: 520px){
-      .showcase{grid-template-columns:1fr;grid-auto-rows:auto;gap:12px}
-      .sh, .sh-1, .sh-2, .sh-3, .sh-4, .sh-5, .sh-6, .sh-7, .sh-8 {
-        grid-column:1;grid-row:auto;aspect-ratio:4/5;
+      .showcase{
+        grid-template-columns:repeat(2,1fr);
+        grid-auto-rows:56px;
+        grid-auto-flow:row dense;
+        gap:8px;
       }
-      .sh-2, .sh-5 {aspect-ratio:16/10}
+      .sh, [class^="sh-"]{grid-column:auto;grid-row:auto;aspect-ratio:auto}
+      /* photos — 2 колонки с разной высотой для живой сетки */
+      .sh-1{grid-column:1;grid-row:span 7}
+      .sh-3{grid-column:2;grid-row:span 5}
+      .sh-4{grid-column:1;grid-row:span 5}
+      .sh-6{grid-column:2;grid-row:span 6}
+      /* videos — на всю ширину */
+      .sh-2{grid-column:1/-1;grid-row:span 4}
+      .sh-5{grid-column:1/-1;grid-row:span 4}
     }
 
     /* -------- Серия (horizontal scroll) -------- */
@@ -482,6 +503,7 @@
       gap:14px;
     }
     .cm{
+      margin:0;
       position:relative;border-radius:24px;overflow:hidden;background:#0F0F0F;
       transition:transform .8s cubic-bezier(.2,.8,.2,1);
     }
@@ -532,12 +554,23 @@
       .cm-7{grid-column:4/7;grid-row:span 4}
     }
     @media (max-width: 520px){
-      .community{grid-template-columns:1fr;grid-auto-rows:auto;gap:12px}
-      .cm, .cm-1, .cm-2, .cm-3, .cm-4, .cm-5, .cm-6, .cm-7 {
-        grid-column:1;grid-row:auto;aspect-ratio:4/5;
+      .community{
+        grid-template-columns:repeat(2,1fr);
+        grid-auto-rows:56px;
+        grid-auto-flow:row dense;
+        gap:8px;
       }
-      .cm-1 {aspect-ratio:16/10}
-      /* «Лекции и нетворкинг» убираем — длинная плашка не помещается */
+      .cm, [class^="cm-"]{grid-column:auto;grid-row:auto;aspect-ratio:auto}
+      /* video — full width */
+      .cm-1{grid-column:1/-1;grid-row:span 4}
+      /* фото в 2 колонки с разной высотой — нарушаем «ровную» сетку */
+      .cm-2{grid-column:1;grid-row:span 6}
+      .cm-3{grid-column:2;grid-row:span 5}
+      .cm-4{grid-column:2;grid-row:span 5}
+      .cm-5{grid-column:1;grid-row:span 5}
+      .cm-6{grid-column:1;grid-row:span 6}
+      .cm-7{grid-column:2;grid-row:span 6}
+      /* «Лекции и нетворкинг» — длинная плашка не помещается на узких фото */
       .cm-2 .label{display:none}
     }
 
@@ -705,7 +738,7 @@
         <span class="eyebrow"><span class="dot"></span>AI-школа Educaty · Петербург · весна 2026</span>
         <h1 class="display">
           <span class="first">Я — креатор.</span><br/>
-          <span class="accent">AI — креатор.</span>
+          <span class="accent">AI — креатор.<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M2 12 C 20 4, 40 18, 60 10 S 100 4, 120 12 S 160 18, 198 8" /></svg></span>
         </h1>
         <p class="sub">Создавай контент мирового уровня без камер, съёмок и границ. Один ноутбук, один курс — и навыки, которые работают на тебя каждый день.</p>
         <div class="ctas">
@@ -846,7 +879,7 @@
           <div class="num">01 / Видео</div>
           <h3>Снимай ролики, не вставая из-за стола.</h3>
           <p>Сценарий, виртуальный актёр, голос, монтаж и субтитры — собираешь полноценный ролик за один вечер с помощью связки AI-инструментов.</p>
-          <span class="tag">Veo · Kling · Runway · ElevenLabs · CapCut</span>
+          <span class="tag">Veo · Kling · ElevenLabs · CapCut</span>
         </article>
         <article class="cap span-4">
           <div class="num">02 / Фото</div>
@@ -1132,7 +1165,8 @@
         <p>Начни с бесплатного мастер-класса в AI-студии Educaty на Петроградке. Если зайдёт — продолжим вместе на курсе.</p>
         <div class="ctas">
           <a class="btn btn-yellow" href="#masterclass">
-            Записаться на мастер-класс
+            <span class="lbl">Записаться на мастер-класс</span>
+            <span class="lbl-sm">Записаться</span>
             <span class="arrow">→</span>
           </a>
           <a class="btn btn-ghost-light" href="#program">К программе</a>
