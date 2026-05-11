@@ -65,7 +65,10 @@
       max-width:100%;
     }
     @media (max-width: 520px){
-      .eyebrow{font-size:11px;padding:7px 12px;letter-spacing:.08em}
+      .eyebrow{font-size:10px;padding:6px 11px;letter-spacing:.05em;gap:8px;white-space:nowrap}
+    }
+    @media (max-width: 380px){
+      .eyebrow{font-size:9.5px;padding:6px 10px;letter-spacing:.03em}
     }
     .eyebrow .dot{width:6px;height:6px;border-radius:999px;background:var(--ink);display:inline-block}
     .eyebrow.on-dark{border-color:var(--line-on-dark);background:rgba(255,255,255,.05);color:#fff}
@@ -147,9 +150,15 @@
     }
     .hero h1 .first{font-weight:700;color:var(--ink)}
     .hero h1 .accent{
-      display:inline-block;background:var(--ink);color:var(--yellow);
-      padding:0 .14em .04em;border-radius:18px;line-height:.95;
-      font-weight:800;max-width:100%;
+      position:relative;display:inline-block;
+      color:var(--ink);font-weight:800;font-style:italic;
+      padding:0 .04em .08em;line-height:.95;max-width:100%;
+    }
+    .hero h1 .accent::after{
+      content:"";position:absolute;
+      left:.04em;right:.04em;bottom:.02em;
+      height:.12em;background:var(--ink);border-radius:999px;
+      transform:skewX(-10deg);
     }
     .hero .sub{
       font-size:clamp(17px,1.4vw,20px);max-width:44ch;color:var(--ink);opacity:.82;
@@ -159,6 +168,10 @@
     @media (max-width: 520px){
       .hero .ctas{flex-direction:column;align-items:stretch}
       .hero .ctas .btn{width:100%}
+      /* На мобильной убираем стрелку у "Начать с бесплатного мастер-класса",
+         чтобы текст помещался в одну строку */
+      .cta-mc .arrow{display:none}
+      .cta-mc{padding:18px 22px}
     }
     .hero-side{display:flex;flex-direction:column;gap:14px;align-self:start;margin-top:38px;min-width:0;width:100%}
     .hero-video{
@@ -269,6 +282,13 @@
     }
     .mc-form input::placeholder{color:#9A9A93}
     .mc-form input:focus{outline:none;border-color:var(--ink);background:#fff}
+    .mc-form .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .mc-form .err{
+      font-size:12.5px;color:#C8332E;font-weight:500;
+      padding:0 4px;display:none;
+    }
+    .mc-form .field.is-error input{border-color:#E94B4B;background:#FFF6F6}
+    .mc-form .field.is-error .err{display:block}
     .mc-form .btn{justify-content:center;width:100%;padding:22px 26px;font-size:17px;margin-top:6px}
     .mc-form .hint{
       display:block;text-align:center;margin-top:4px;
@@ -372,9 +392,11 @@
       .sh-8{grid-column:1/7;grid-row:span 5}
     }
     @media (max-width: 520px){
-      .showcase{grid-template-columns:1fr 1fr;grid-auto-rows:54px}
-      .sh-1,.sh-5,.sh-8{grid-column:1/-1;grid-row:span 5}
-      .sh-2,.sh-3,.sh-4,.sh-6,.sh-7{grid-column:span 1;grid-row:span 4}
+      .showcase{grid-template-columns:1fr;grid-auto-rows:auto;gap:12px}
+      .sh, .sh-1, .sh-2, .sh-3, .sh-4, .sh-5, .sh-6, .sh-7, .sh-8 {
+        grid-column:1;grid-row:auto;aspect-ratio:4/5;
+      }
+      .sh-2, .sh-5 {aspect-ratio:16/10}
     }
 
     /* -------- Серия (horizontal scroll) -------- */
@@ -510,9 +532,13 @@
       .cm-7{grid-column:4/7;grid-row:span 4}
     }
     @media (max-width: 520px){
-      .community{grid-template-columns:1fr 1fr;grid-auto-rows:56px}
-      .cm-1{grid-column:1/-1;grid-row:span 6}
-      .cm-2,.cm-3,.cm-4,.cm-5,.cm-6,.cm-7{grid-column:span 1;grid-row:span 4}
+      .community{grid-template-columns:1fr;grid-auto-rows:auto;gap:12px}
+      .cm, .cm-1, .cm-2, .cm-3, .cm-4, .cm-5, .cm-6, .cm-7 {
+        grid-column:1;grid-row:auto;aspect-ratio:4/5;
+      }
+      .cm-1 {aspect-ratio:16/10}
+      /* «Лекции и нетворкинг» убираем — длинная плашка не помещается */
+      .cm-2 .label{display:none}
     }
 
     /* -------- FAQ -------- */
@@ -676,14 +702,14 @@
   <section class="hero">
     <div class="wrap grid">
       <div class="hero-main">
-        <span class="eyebrow"><span class="dot"></span>AI-школа Educaty · Петербург · поток весна 2026</span>
+        <span class="eyebrow"><span class="dot"></span>AI-школа Educaty · Петербург · весна 2026</span>
         <h1 class="display">
           <span class="first">Я — креатор.</span><br/>
           <span class="accent">AI — креатор.</span>
         </h1>
         <p class="sub">Создавай контент мирового уровня без камер, съёмок и границ. Один ноутбук, один курс — и навыки, которые работают на тебя каждый день.</p>
         <div class="ctas">
-          <a class="btn btn-primary" href="#masterclass">
+          <a class="btn btn-primary cta-mc" href="#masterclass">
             Начать с бесплатного мастер-класса
             <span class="arrow">→</span>
           </a>
@@ -772,15 +798,20 @@
             <form id="form-mc" novalidate>
               <input type="hidden" name="form_name" value="ai-creator-masterclass" />
               <div class="row">
-                <input type="text" name="Name" placeholder="Меня зовут" autocomplete="name" required />
-                <input type="tel" name="Phone" id="mcPhone" placeholder="+7 (___) ___-__-__" autocomplete="tel" inputmode="tel" required />
+                <label class="field" for="mcName">
+                  <input type="text" id="mcName" name="Name" placeholder="Меня зовут" autocomplete="name" required minlength="2" aria-describedby="mcNameErr" />
+                  <span class="err" id="mcNameErr">Пожалуйста, укажите ваше имя</span>
+                </label>
+                <label class="field" for="mcPhone">
+                  <input type="tel" id="mcPhone" name="Phone" placeholder="+7 (___) ___-__-__" autocomplete="tel" inputmode="tel" required aria-describedby="mcPhoneErr" />
+                  <span class="err" id="mcPhoneErr">Введите корректный номер: +7 (XXX) XXX-XX-XX</span>
+                </label>
               </div>
               <button class="btn btn-primary" type="submit">
                 Подать заявку
                 <span class="arrow">→</span>
               </button>
               <span class="hint">Подберём занятие, удобное по времени</span>
-              <span class="small">Нажимая, вы соглашаетесь с обработкой персональных данных.</span>
             </form>
             <div class="ok">
               <h4>Заявка принята!</h4>
@@ -1160,7 +1191,7 @@
 
   <!-- STICKY CTA -->
   <div class="sticky-cta" id="stickyCta" aria-hidden="true">
-    <a class="btn btn-primary" href="#masterclass">
+    <a class="btn btn-primary cta-mc" href="#masterclass">
       Начать с бесплатного мастер-класса
       <span class="arrow">→</span>
     </a>
@@ -1210,15 +1241,45 @@
       const wrap = document.getElementById('mcFormWrap');
       const form = document.getElementById('form-mc');
       if(!form) return;
+
+      // helpers для валидации
+      const nameInp  = form.querySelector('#mcName');
+      const phoneInp = form.querySelector('#mcPhone');
+      function setError(inp, on){
+        const field = inp.closest('.field');
+        if (field) field.classList.toggle('is-error', !!on);
+      }
+      function validName(){ return nameInp.value.trim().length >= 2; }
+      function validPhone(){
+        // 11 цифр и начинается с 7 (после маски)
+        const d = phoneInp.value.replace(/\D/g,'');
+        return d.length === 11 && d.startsWith('7');
+      }
+      // снимаем ошибку как только начали править
+      nameInp.addEventListener('input', () => { if (validName()) setError(nameInp, false); });
+      phoneInp.addEventListener('input', () => { if (validPhone()) setError(phoneInp, false); });
+
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        // валидация — клиентская
+        const okName  = validName();
+        const okPhone = validPhone();
+        setError(nameInp,  !okName);
+        setError(phoneInp, !okPhone);
+        if (!okName || !okPhone){
+          // подсветим и фокус на первое некорректное
+          (okName ? phoneInp : nameInp).focus();
+          return;
+        }
+
         const btn = form.querySelector('button[type="submit"]');
         const original = btn.innerHTML;
         btn.disabled = true; btn.innerHTML = 'Отправляем…';
 
         const data = {
-          name: form.Name.value.trim(),
-          phone: form.Phone.value.trim(),
+          name: nameInp.value.trim(),
+          phone: phoneInp.value.trim(),
           form: 'ai-creator-masterclass',
           page: location.href,
           ts:   new Date().toISOString(),
