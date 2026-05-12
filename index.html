@@ -714,7 +714,8 @@
         <img src="assets/img/logo.png" alt="Educaty" />
       </a>
       <nav>
-        <a href="#program">Программа курса</a>
+        <a href="#masterclass">Мастер-класс</a>
+        <a href="#program">Программа</a>
         <a href="#audience">Кому подойдёт</a>
         <a href="#community">Комьюнити</a>
         <a href="#faq">FAQ</a>
@@ -1141,7 +1142,7 @@
           <div class="a">Ноутбук, стабильный интернет и аккаунты в основных AI-сервисах. Платные подписки нужны не на всё — мы расскажем, что обязательно, а где хватит бесплатного тарифа.</div>
         </details>
         <details>
-          <summary>Будете ли разбирать домашние задания?</summary>
+          <summary>Дадите ли домашки разбирать лично?</summary>
           <div class="a">Да. Куратор разбирает работы каждую неделю — на живой встрече и в чате. Это то, ради чего стоит идти в группу, а не учиться по YouTube.</div>
         </details>
         <details>
@@ -1269,7 +1270,7 @@
     // -------- form submit: POST в свой webhook (см. SETUP.md) --------
     // ВАЖНО: укажите URL вашего lead-forwarder (Cloudflare Worker / Vercel и т.п.).
     // Готовый код прослойки + инструкция — в файле SETUP.md.
-    const LEAD_ENDPOINT = "https://YOUR-LEAD-FORWARDER-URL.workers.dev";
+    const LEAD_ENDPOINT = "https://educaty-leads.anisimov-dim.workers.dev/";
 
     (function(){
       const wrap = document.getElementById('mcFormWrap');
