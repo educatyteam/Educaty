@@ -1,0 +1,67 @@
+# =====================================================================
+# Educaty — .htaccess для Apache (Timeweb, Beget, любой shared-хостинг)
+# =====================================================================
+
+# ---- Кастомная 404-страница ----
+ErrorDocument 404 /404.html
+
+# ---- Принудительный HTTPS ----
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # http → https
+  RewriteCond %{HTTPS} off
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # www → без www (если хотите наоборот — поменяйте местами)
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# ---- Gzip-сжатие (быстрее загружается) ----
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml font/woff font/woff2
+</IfModule>
+
+# ---- Кэширование статики в браузере ----
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault                              "access plus 1 day"
+
+  # картинки и видео
+  ExpiresByType image/jpeg                    "access plus 1 month"
+  ExpiresByType image/png                     "access plus 1 month"
+  ExpiresByType image/webp                    "access plus 1 month"
+  ExpiresByType image/svg+xml                 "access plus 1 month"
+  ExpiresByType image/x-icon                  "access plus 1 year"
+  ExpiresByType video/mp4                     "access plus 1 month"
+
+  # шрифты
+  ExpiresByType font/woff                     "access plus 1 year"
+  ExpiresByType font/woff2                    "access plus 1 year"
+
+  # css / js
+  ExpiresByType text/css                      "access plus 7 days"
+  ExpiresByType application/javascript        "access plus 7 days"
+
+  # сам HTML — короткий кэш, чтобы правки видели быстро
+  ExpiresByType text/html                     "access plus 0 seconds"
+</IfModule>
+
+# ---- Security headers ----
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# ---- Запретить листинг каталогов ----
+Options -Indexes
+
+# ---- Запретить доступ к служебным файлам ----
+<FilesMatch "^(\.htaccess|\.gitignore|SETUP\.md|lead-forwarder\.js)$">
+  Require all denied
+</FilesMatch>
