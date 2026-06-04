@@ -263,6 +263,27 @@
     .mc h2{font-family:var(--display);font-weight:800;font-size:clamp(34px,4.6vw,58px);line-height:.95;letter-spacing:-.02em;margin:18px 0 18px;max-width:16ch}
     .mc .lead{font-size:17px;color:var(--ink);opacity:.82;max-width:46ch;margin:0 0 24px}
 
+    .mc-perks{
+      list-style:none;padding:0;
+      display:flex;flex-wrap:wrap;gap:8px;margin:-4px 0 22px;
+    }
+    .mc-perks li{
+      list-style:none;
+      display:inline-flex;align-items:center;gap:8px;
+      background:#fff;color:var(--ink);
+      border:1px solid rgba(10,10,10,.1);
+      padding:9px 14px;border-radius:999px;
+      font-size:14px;font-weight:500;line-height:1;
+    }
+    .mc-perks li::before{
+      content:"";width:16px;height:16px;flex:none;
+      background:var(--ink);border-radius:999px;
+      -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M3.5 8.5l3 3 6-7' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+              mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M3.5 8.5l3 3 6-7' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+      -webkit-mask-size:contain;mask-size:contain;
+      -webkit-mask-position:center;mask-position:center;
+      -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+    }
     .mc-meta{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 0 0}
     .mc-meta .it{
       background:rgba(10,10,10,.07);border-radius:18px;padding:16px 18px;
@@ -736,7 +757,7 @@
   <section class="hero">
     <div class="wrap grid">
       <div class="hero-main">
-        <span class="eyebrow"><span class="dot"></span>AI-школа Educaty · Петербург · весна 2026</span>
+        <span class="eyebrow"><span class="dot"></span>AI-школа Educaty · Петербург · лето 2026</span>
         <h1 class="display">
           <span class="first">Я — креатор.</span><br/>
           <span class="accent">AI — креатор.<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M2 12 C 20 4, 40 18, 60 10 S 100 4, 120 12 S 160 18, 198 8" /></svg></span>
@@ -814,6 +835,12 @@
             <h2>Бесплатный мастер-класс в AI-студии Educaty.</h2>
             <p class="lead">В самом сердце Петроградки. Уютная студия в 1 минуте от метро Петроградская: стильный дизайн и уникальный вид на театр им. Андрея Миронова. Место, где можно по-настоящему окунуться в мир новых технологий и креатива, пообщаться с интересными людьми и провести время с пользой.</p>
 
+            <ul class="mc-perks" aria-label="Что не нужно для мастер-класса">
+              <li>Подходит всем</li>
+              <li>Опыт с AI не нужен</li>
+              <li>Ноутбук брать не нужно</li>
+            </ul>
+
             <div class="mc-meta">
               <div class="it">
                 <span class="k">Адрес</span>
@@ -821,7 +848,7 @@
               </div>
               <div class="it">
                 <span class="k">Длительность</span>
-                <span class="v">1–1,5 часа<br/>лекция с интерактивом</span>
+                <span class="v">1–1,5 часа<br/>мастер-класс с интерактивами</span>
               </div>
             </div>
           </div>
@@ -948,59 +975,99 @@
       <div class="section-head">
         <div>
           <span class="eyebrow"><span class="dot"></span>Программа</span>
-          <h2>6 модулей. От первой нейросети — до собственного контент-конвейера.</h2>
+          <h2>11 модулей. От старта — до стабильного дохода на AI-визуале.</h2>
         </div>
-        <p class="lead">Каждую неделю — новый модуль, живая встреча с куратором, домашка с разбором. На выходе — портфолио и готовая система производства контента.</p>
+        <p class="lead">Системный путь от первых генераций до коммерческих съёмок, видео и анимации. Каждый модуль — теория, разбор и практика. На выходе — диплом, портфолио и профессия, за которую платят бренды.</p>
       </div>
 
       <div class="program">
         <div class="row">
           <div class="num">01</div>
           <div>
-            <div class="ttl">Мышление AI-креатора</div>
-            <div class="desc">Как смотреть на любой контент глазами режиссёра, дизайнера и продюсера одновременно. Карта инструментов и личный AI-стек.</div>
+            <div class="ttl">Вводный блок</div>
+            <div class="desc">Знакомимся, разбираем дорожную карту курса и какого уровня результат реально создавать нейросетями сегодня. Готовим доступы, подписки и оборудование.</div>
           </div>
-          <div class="meta">Неделя 1 · 4 урока</div>
+          <div class="meta">Старт</div>
         </div>
         <div class="row">
           <div class="num">02</div>
           <div>
-            <div class="ttl">Тексты, сценарии, голос бренда</div>
-            <div class="desc">Промпты, которые работают. Шаблоны для постов, Reels и рассылок. Как не звучать как нейросеть.</div>
+            <div class="ttl">Бренд, рынок и идея</div>
+            <div class="desc">Учимся считывать ДНК бренда, читать рынок и превращать это в точную идею для съёмки. Референсы, мудборды, концепции под задачу — фундамент профессионала.</div>
           </div>
-          <div class="meta">Неделя 2 · 5 уроков</div>
+          <div class="meta">Стратегия</div>
         </div>
         <div class="row">
           <div class="num">03</div>
           <div>
-            <div class="ttl">Фото и обложки уровня премиум</div>
-            <div class="desc">Midjourney, Nano Banana, Flux. Свой стиль, фирменная палитра, обложки для Reels, YouTube и подкастов.</div>
+            <div class="ttl">Текстовые нейросети: ChatGPT</div>
+            <div class="desc">ChatGPT как рабочий инструмент: где реально помогает, как использовать в стратегии, брифах и промптах — без потери качества.</div>
           </div>
-          <div class="meta">Неделя 3 · 6 уроков</div>
+          <div class="meta">Инструменты</div>
         </div>
         <div class="row">
           <div class="num">04</div>
           <div>
-            <div class="ttl">Видео без камеры</div>
-            <div class="desc">Veo, Kling, Runway. Сценарий → раскадровка → видео → монтаж → озвучка. Делаем первый ролик уровня топ-блогеров.</div>
+            <div class="ttl">База мастерства</div>
+            <div class="desc">Midjourney и Higgsfield: интерфейс, логика, профессиональный промптинг, свой визуальный почерк. Первая осознанная генерация уровня, который не стыдно показать клиенту.</div>
           </div>
-          <div class="meta">Неделя 4 · 6 уроков</div>
+          <div class="meta">Фотогенерация · I</div>
         </div>
         <div class="row">
           <div class="num">05</div>
           <div>
-            <div class="ttl">Личный аватар и AI-актёр</div>
-            <div class="desc">Создаём цифровую копию для Reels, рекламных роликов и обучения. Аватар, голос, поведение в кадре.</div>
+            <div class="ttl">Коммерческая съёмка</div>
+            <div class="desc">Ядро курса. Nano Banana: перенос реального продукта клиента, работа с одеждой на модели, предметка, консистентные серии, профессиональная ретушь, апскейл, лукбук уровня бренда.</div>
           </div>
-          <div class="meta">Неделя 5 · 4 урока</div>
+          <div class="meta">Фотогенерация · II</div>
         </div>
         <div class="row">
           <div class="num">06</div>
           <div>
-            <div class="ttl">Контент-конвейер</div>
-            <div class="desc">Собираем систему: 30 единиц контента в месяц без выгорания. Notion, Make, n8n и Telegram — на твоей стороне.</div>
+            <div class="ttl">Нейрофотосессия со своим лицом</div>
+            <div class="desc">Фотосессии с собственным или клиентским лицом — отдельная премиальная услуга. Консистентное лицо в разных образах и сценах, доводка до коммерческого качества.</div>
           </div>
-          <div class="meta">Неделя 6 · 5 уроков</div>
+          <div class="meta">Личный бренд</div>
+        </div>
+        <div class="row">
+          <div class="num">07</div>
+          <div>
+            <div class="ttl">Видеогенерация</div>
+            <div class="desc">Оживляем визуал: ролики с людьми и предметкой, морфинг и трансформации, рекламное видео уровня кампании, форматы под Reels и Shorts.</div>
+          </div>
+          <div class="meta">Видео</div>
+        </div>
+        <div class="row">
+          <div class="num">08</div>
+          <div>
+            <div class="ttl">Монтаж и саунд-дизайн</div>
+            <div class="desc">Бонусный модуль. Финальная сборка готового продукта: монтаж, музыка, звук, переходы — рекламный ролик, который не стыдно сдать клиенту.</div>
+          </div>
+          <div class="meta">Постпродакшн · бонус</div>
+        </div>
+        <div class="row">
+          <div class="num">09</div>
+          <div>
+            <div class="ttl">Липсинк и говорящие персонажи</div>
+            <div class="desc">Говорящие модели и аватары: липсинк, озвучка, генерация музыки нейросетями. Отдельная востребованная коммерческая ниша.</div>
+          </div>
+          <div class="meta">Аватары</div>
+        </div>
+        <div class="row">
+          <div class="num">10</div>
+          <div>
+            <div class="ttl">Анимация и мультики</div>
+            <div class="desc">Идея, сценарий, раскадровка, оживление и озвучка персонажей. Анимация выделяет бренд на фоне всех остальных.</div>
+          </div>
+          <div class="meta">Анимация</div>
+        </div>
+        <div class="row">
+          <div class="num">11</div>
+          <div>
+            <div class="ttl">Как зарабатывать на нейросетях</div>
+            <div class="desc">От первых заказов до собственной студии: ниши и роли на рынке AI-визуала, упаковка специалиста, поиск клиентов, ценообразование, личный бренд и кейсы.</div>
+          </div>
+          <div class="meta">Деньги</div>
         </div>
       </div>
     </div>

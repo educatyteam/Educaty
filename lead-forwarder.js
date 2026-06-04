@@ -94,30 +94,104 @@ async function sendTelegram(env, name, phone, meta) {
   return { ok: r.ok, status: r.status, body };
 }
 
-/* ------------------------------ amoCRM ------------------------------ */
+/* ------------------------------ amoCRM (API v4) ------------------------------ */
+// Создаёт связку «контакт + сделка» в amoCRM через REST API v4.
+// Требует переменные:
+//   AMOCRM_SUBDOMAIN          — например 'painty' (адрес https://painty.amocrm.ru)
+//   AMOCRM_TOKEN              — долгоживущий токен из настроек интеграции
+//   AMOCRM_PIPELINE_ID        — id воронки (число)
+//   AMOCRM_STATUS_NAME        — необязательно, имя этапа (по умолчанию «Новый лид»)
+//   AMOCRM_STATUS_ID          — необязательно, если знаете id этапа — подставит без поиска
+//   AMOCRM_RESPONSIBLE_USER_ID — необязательно, id ответственного менеджера
 async function sendAmoCRM(env, name, phone, meta) {
-  if (!env.AMOCRM_WEBHOOK_URL) {
-    return { ok: false, error: "amocrm webhook not configured" };
+  if (!env.AMOCRM_SUBDOMAIN || !env.AMOCRM_TOKEN) {
+    return { ok: false, error: "amocrm not configured" };
   }
-  // amoCRM «Входящие вебхуки» принимает x-www-form-urlencoded с полями
-  // contact[name], contact[phone], lead[name], lead[tags] и т.д.
-  // Если используете «Salesbot» или «webhook → digital pipeline», поля будут
-  // прокинуты в Salesbot Variables.
-  const form = new URLSearchParams();
-  form.set("contact[name]", name);
-  form.set("contact[phone]", phone);
-  form.set("lead[name]", `Заявка: ${meta.form}`);
-  form.set("lead[tags]", "ai-creator,landing");
-  form.set("lead[note]",
-    `Источник: ${meta.page}\nUTM: ${JSON.stringify(meta.utm)}\nUA: ${meta.ua}\nIP: ${meta.ip}`);
+  const base = `https://${env.AMOCRM_SUBDOMAIN}.amocrm.ru/api/v4`;
+  const headers = {
+    "Authorization": `Bearer ${env.AMOCRM_TOKEN}`,
+    "Content-Type":  "application/json",
+  };
+  const pipelineId = parseInt(env.AMOCRM_PIPELINE_ID || "0", 10) || null;
 
-  const r = await fetch(env.AMOCRM_WEBHOOK_URL, {
+  // 1) status_id — берём явно, либо ищем по имени в воронке
+  let statusId = parseInt(env.AMOCRM_STATUS_ID || "0", 10) || null;
+  if (!statusId && pipelineId) {
+    const wanted = (env.AMOCRM_STATUS_NAME || "Новый лид").toLowerCase();
+    try {
+      const r = await fetch(`${base}/leads/pipelines/${pipelineId}/statuses`, { headers });
+      if (!r.ok) {
+        const txt = await r.text();
+        return { ok: false, error: `statuses lookup ${r.status}`, body: txt.slice(0, 200) };
+      }
+      const data = await r.json();
+      const found = (data._embedded?.statuses || []).find(
+        s => (s.name || "").toLowerCase() === wanted
+      );
+      if (!found) {
+        return { ok: false, error: `status "${env.AMOCRM_STATUS_NAME || "Новый лид"}" not found in pipeline ${pipelineId}` };
+      }
+      statusId = found.id;
+    } catch (e) {
+      return { ok: false, error: `statuses lookup error: ${String(e)}` };
+    }
+  }
+
+  // 2) Создаём связку сделка + контакт
+  const lead = {
+    name: name,
+    _embedded: {
+      tags: [{ name: "ai-creator" }, { name: "landing" }],
+      contacts: [{
+        name: name,
+        custom_fields_values: [{
+          field_code: "PHONE",
+          values: [{ value: phone, enum_code: "MOB" }],
+        }],
+      }],
+    },
+  };
+  if (pipelineId) lead.pipeline_id = pipelineId;
+  if (statusId)   lead.status_id   = statusId;
+  const responsibleId = parseInt(env.AMOCRM_RESPONSIBLE_USER_ID || "0", 10) || null;
+  if (responsibleId) {
+    lead.responsible_user_id = responsibleId;
+    // также назначаем менеджера на контакт
+    lead._embedded.contacts[0].responsible_user_id = responsibleId;
+  }
+
+  const r = await fetch(`${base}/leads/complex`, {
     method: "POST",
-    headers: { "content-type": "application/x-www-form-urlencoded" },
-    body: form.toString(),
+    headers,
+    body: JSON.stringify([lead]),
   });
-  const text = await r.text();
-  return { ok: r.ok, status: r.status, body: text.slice(0, 500) };
+  const txt = await r.text();
+  let parsed;
+  try { parsed = JSON.parse(txt); } catch { parsed = txt.slice(0, 500); }
+  if (!r.ok) {
+    return { ok: false, status: r.status, body: parsed };
+  }
+
+  // 3) Прикладываем примечание с источником/UTM (best effort)
+  const leadId = Array.isArray(parsed) ? parsed[0]?.id : null;
+  if (leadId) {
+    const noteText = [
+      meta.page ? `Источник: ${meta.page}` : null,
+      meta.utm && Object.keys(meta.utm).length ? `UTM: ${JSON.stringify(meta.utm)}` : null,
+      meta.ua ? `UA: ${meta.ua}` : null,
+      meta.ip ? `IP: ${meta.ip}` : null,
+    ].filter(Boolean).join("\n");
+    if (noteText) {
+      // не ждём — если упадёт, заявку всё равно создали
+      fetch(`${base}/leads/${leadId}/notes`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify([{ note_type: "common", params: { text: noteText } }]),
+      }).catch(() => {});
+    }
+  }
+
+  return { ok: true, status: r.status, leadId, body: parsed };
 }
 
 /* ------------------------------ helpers ------------------------------ */

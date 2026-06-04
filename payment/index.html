@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Оплата курса · Educaty</title>
+  <meta name="description" content="Оплата курса «Я — креатор. AI — креатор.» в AI-школе Educaty. Картой, через СБП или Долями." />
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png" />
+  <link rel="apple-touch-icon" href="../assets/img/favicon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Unbounded:wght@500;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- T-Bank Acquiring SDK -->
+  <script src="https://securepay.tinkoff.ru/html/payForm/js/tinkoff_v2.js"></script>
+
+  <style>
+    :root{
+      --yellow:#ECF6A0;
+      --yellow-deep:#DDE986;
+      --cream:#FAF8EE;
+      --ink:#0A0A0A;
+      --line:rgba(10,10,10,.12);
+      --muted:#5A5A55;
+      --error:#C8332E;
+      --display:"Unbounded","Inter",system-ui,sans-serif;
+      --body:"Inter",system-ui,-apple-system,Segoe UI,sans-serif;
+    }
+    *{box-sizing:border-box;min-width:0}
+    html,body{margin:0;padding:0;max-width:100%}
+    html{overflow-x:hidden;scroll-behavior:smooth}
+    body{
+      font-family:var(--body);color:var(--ink);background:var(--cream);
+      -webkit-font-smoothing:antialiased;
+      min-height:100vh;display:flex;flex-direction:column;
+      overflow-x:hidden;font-size:16px;line-height:1.5;
+    }
+
+    /* topbar */
+    .topbar{
+      position:sticky;top:0;z-index:5;
+      backdrop-filter:saturate(160%) blur(14px);
+      background:rgba(250,248,238,.78);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar .inner{
+      max-width:1180px;margin:0 auto;
+      padding:0 clamp(20px,4vw,56px);
+      display:flex;align-items:center;justify-content:space-between;
+      height:72px;gap:18px;
+    }
+    .topbar .logo img{height:26px;width:auto}
+    .topbar .back{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:14px;color:var(--ink);opacity:.7;text-decoration:none;
+    }
+    .topbar .back:hover{opacity:1}
+
+    /* main */
+    .wrap{
+      max-width:1180px;width:100%;margin:0 auto;
+      padding:clamp(32px,5vw,72px) clamp(20px,4vw,56px) 80px;
+      flex:1;
+    }
+    .head{margin-bottom:clamp(28px,4vw,48px)}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:10px;
+      font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+      padding:7px 14px;border:1px solid var(--line);border-radius:999px;
+      background:rgba(255,255,255,.6);
+    }
+    .eyebrow .dot{width:6px;height:6px;border-radius:999px;background:var(--ink)}
+    h1{
+      font-family:var(--display);font-weight:800;letter-spacing:-.025em;
+      font-size:clamp(36px,5.2vw,64px);line-height:.95;
+      margin:16px 0 0;max-width:18ch;word-break:break-word;
+    }
+
+    /* grid: order + form */
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1.2fr;
+      gap:clamp(20px,3vw,40px);
+      align-items:start;
+    }
+    @media (max-width:880px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    /* order summary */
+    .order{
+      background:var(--yellow);
+      border-radius:28px;
+      padding:clamp(24px,3vw,36px);
+      position:sticky;top:96px;
+    }
+    @media (max-width:880px){.order{position:static}}
+    .order h2{
+      font-family:var(--display);font-weight:700;font-size:22px;
+      margin:0 0 6px;letter-spacing:-.01em;
+    }
+    .order .meta{color:var(--ink);opacity:.7;font-size:14px;margin:0 0 24px}
+    .order ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;border-top:1px solid rgba(10,10,10,.1);padding-top:18px}
+    .order li{display:flex;align-items:flex-start;gap:10px;font-size:15px;line-height:1.4}
+    .order li::before{
+      content:"";width:6px;height:6px;border-radius:999px;background:var(--ink);
+      flex:none;margin-top:9px;
+    }
+    .order .total{
+      margin-top:24px;padding-top:20px;border-top:1px solid rgba(10,10,10,.1);
+      display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+    }
+    .order .total .label{font-size:14px;color:var(--ink);opacity:.7}
+    .order .total .price{
+      font-family:var(--display);font-weight:800;font-size:36px;letter-spacing:-.02em;
+    }
+
+    /* payment box */
+    .pay{
+      background:#fff;border:1px solid var(--line);border-radius:28px;
+      padding:clamp(24px,3vw,40px);
+      box-shadow:0 30px 60px -36px rgba(10,10,10,.18);
+    }
+    .pay h2{font-family:var(--display);font-weight:700;font-size:22px;margin:0 0 6px;letter-spacing:-.01em}
+    .pay .sub{color:var(--muted);font-size:14px;margin:0 0 22px}
+
+    .form{display:flex;flex-direction:column;gap:14px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-size:13px;color:var(--ink);opacity:.7;font-weight:500;padding-left:4px}
+    .field input{
+      padding:16px 18px;border:1.5px solid var(--line);border-radius:14px;
+      font-size:15px;font-family:inherit;background:#FAFAF7;width:100%;font-weight:500;
+      transition:border-color .15s ease,background .15s ease;
+    }
+    .field input::placeholder{color:#9A9A93}
+    .field input:focus{outline:none;border-color:var(--ink);background:#fff}
+    .field.is-error input{border-color:var(--error);background:#FFF5F4}
+    .field .err{font-size:12.5px;color:var(--error);font-weight:500;padding-left:4px;display:none}
+    .field.is-error .err{display:block}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media (max-width:520px){.row2{grid-template-columns:1fr}}
+
+    /* payment buttons */
+    .methods{
+      display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;
+    }
+    @media (max-width:520px){.methods{grid-template-columns:1fr}}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      padding:18px 22px;border-radius:16px;
+      font-weight:600;font-size:15px;line-height:1.2;
+      cursor:pointer;border:none;font-family:inherit;
+      transition:transform .15s ease, background .15s ease, color .15s ease, border-color .15s ease;
+      text-align:center;width:100%;
+    }
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    .btn-card{background:var(--ink);color:#fff;grid-column:1/-1}
+    .btn-card:hover{background:#222;transform:translateY(-1px)}
+    .btn-sbp{
+      background:#fff;color:var(--ink);
+      border:1.5px solid var(--ink);
+    }
+    .btn-sbp:hover{background:var(--ink);color:#fff}
+    .btn-sbp .icon{width:22px;height:22px;flex:none}
+    .btn-bnpl{
+      background:#fff;color:var(--ink);
+      border:1.5px solid var(--ink);
+    }
+    .btn-bnpl:hover{background:var(--ink);color:#fff}
+    .btn-bnpl .price-sm{font-size:12px;font-weight:500;opacity:.7;margin-left:4px}
+
+    .hint{
+      margin-top:14px;font-size:13px;color:var(--muted);line-height:1.5;text-align:center;
+    }
+    .hint .secure{display:inline-flex;align-items:center;gap:6px;font-weight:500}
+    .hint a{color:var(--ink);text-decoration:underline;text-decoration-color:rgba(10,10,10,.3)}
+    .hint a:hover{text-decoration-color:var(--ink)}
+
+    /* footer */
+    .foot{
+      padding:24px clamp(20px,4vw,56px);
+      font-size:13px;color:rgba(10,10,10,.5);text-align:center;
+      border-top:1px solid rgba(10,10,10,.06);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="inner">
+      <a class="logo" href="/" aria-label="Educaty">
+        <img src="../assets/img/logo.png" alt="Educaty" />
+      </a>
+      <a class="back" href="/">← На главную</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="head">
+      <span class="eyebrow"><span class="dot"></span>Оплата курса</span>
+      <h1>Курс «Я — креатор. AI — креатор.»</h1>
+    </div>
+
+    <div class="grid">
+
+      <!-- ────────────── Order summary ────────────── -->
+      <aside class="order">
+        <h2>Ваш заказ</h2>
+        <p class="meta">AI-школа Educaty · поток весна 2026</p>
+
+        <ul>
+          <li>6 недель практики + 6 живых встреч с куратором</li>
+          <li>10+ AI-инструментов: Veo, Kling, Midjourney, Nano Banana, Flux и др.</li>
+          <li>7 проектов в портфолио и личный AI-стек</li>
+          <li>Доступ к закрытому комьюнити Educaty в Петербурге</li>
+          <li>Запись всех занятий остаётся с вами навсегда</li>
+        </ul>
+
+        <div class="total">
+          <span class="label">Итого к оплате</span>
+          <span class="price">49 000 ₽</span>
+        </div>
+      </aside>
+
+      <!-- ────────────── Payment form ────────────── -->
+      <section class="pay">
+        <h2>Контактные данные</h2>
+        <p class="sub">После оплаты пришлём доступ к личному кабинету и расписание потока.</p>
+
+        <form class="form" id="payForm" novalidate>
+          <div class="field" id="f-name">
+            <label for="payName">Имя и фамилия</label>
+            <input id="payName" type="text" name="name" placeholder="Дмитрий Анисимов" autocomplete="name" required minlength="2" />
+            <span class="err">Укажите ваше имя</span>
+          </div>
+
+          <div class="row2">
+            <div class="field" id="f-email">
+              <label for="payEmail">Email</label>
+              <input id="payEmail" type="email" name="email" placeholder="you@example.com" autocomplete="email" required />
+              <span class="err">Укажите корректный email</span>
+            </div>
+            <div class="field" id="f-phone">
+              <label for="payPhone">Телефон</label>
+              <input id="payPhone" type="tel" name="phone" placeholder="+7 (___) ___-__-__" autocomplete="tel" inputmode="tel" required />
+              <span class="err">Введите корректный номер</span>
+            </div>
+          </div>
+
+          <div class="methods">
+            <button type="button" class="btn btn-card" id="btnCard">
+              Оплатить картой
+              <span>·</span>
+              <span>49 000 ₽</span>
+            </button>
+
+            <button type="button" class="btn btn-sbp" id="btnSbp" aria-label="Оплатить через СБП">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M3 7l4 5-4 5h3l4-5-4-5H3zm15 0h-3l-4 5 4 5h3l-4-5 4-5z"/>
+              </svg>
+              СБП
+            </button>
+
+            <button type="button" class="btn btn-bnpl" id="btnBnpl">
+              Долями
+              <span class="price-sm">от 12 250 ₽ × 4</span>
+            </button>
+          </div>
+
+          <p class="hint">
+            <span class="secure">🔒 Защищённое соединение T-Bank Acquiring</span><br/>
+            Нажимая на кнопку, вы соглашаетесь с
+            <a href="/oferta" target="_blank" rel="noopener">офертой</a> и
+            <a href="/privacy" target="_blank" rel="noopener">политикой конфиденциальности</a>.
+          </p>
+        </form>
+
+        <!-- Скрытая форма для T-Bank SDK. Заполняется JS перед вызовом pay(). -->
+        <form name="TinkoffPayForm" id="TinkoffPayForm" style="display:none">
+          <input type="hidden" name="terminalkey" value="" id="tbTerminalKey" />
+          <input type="hidden" name="frame"       value="false" />
+          <input type="hidden" name="language"    value="ru" />
+          <input type="hidden" name="amount"      value="49000.00" />
+          <input type="hidden" name="order"       value="" id="tbOrder" />
+          <input type="hidden" name="description" value="Курс «Я — креатор. AI — креатор.»" />
+          <input type="hidden" name="name"        value="" id="tbName" />
+          <input type="hidden" name="email"       value="" id="tbEmail" />
+          <input type="hidden" name="phone"       value="" id="tbPhone" />
+          <input type="hidden" name="DATA"        value="" id="tbData" />
+        </form>
+      </section>
+
+    </div>
+  </main>
+
+  <div class="foot">
+    © 2026 Educaty · AI-школа в Санкт-Петербурге · hello@educaty.com
+  </div>
+
+  <script>
+    // ============================================
+    // CONFIG — впишите свой Terminal Key от T-Bank
+    // ============================================
+    const TBANK_TERMINAL_KEY = "PUT_YOUR_TERMINAL_KEY_HERE";
+
+    // ============================================
+    document.getElementById("tbTerminalKey").value = TBANK_TERMINAL_KEY;
+
+    // Маска телефона (RU)
+    (function(){
+      const inp = document.getElementById("payPhone");
+      function format(raw){
+        let d = raw.replace(/\D/g,"");
+        if (d.startsWith("8")) d = "7" + d.slice(1);
+        if (!d.startsWith("7")) d = "7" + d;
+        d = d.slice(0,11);
+        const a=d.slice(1,4), b=d.slice(4,7), c=d.slice(7,9), e=d.slice(9,11);
+        let out="+7";
+        if(a) out+=" ("+a + (a.length===3 ? ")":"");
+        if(b) out+=" "+b;
+        if(c) out+="-"+c;
+        if(e) out+="-"+e;
+        return out;
+      }
+      inp.addEventListener("focus",()=>{ if(!inp.value) inp.value="+7 ("; });
+      inp.addEventListener("input",()=>{ inp.value = format(inp.value); });
+      inp.addEventListener("blur",()=>{ if(inp.value==="+7 ("||inp.value==="+7") inp.value=""; });
+    })();
+
+    // Валидация
+    function setErr(id, on){
+      const f = document.getElementById(id);
+      if (f) f.classList.toggle("is-error", !!on);
+    }
+    function validate(){
+      const name  = document.getElementById("payName").value.trim();
+      const email = document.getElementById("payEmail").value.trim();
+      const phone = document.getElementById("payPhone").value.replace(/\D/g,"");
+      const okName  = name.length >= 2;
+      const okEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      const okPhone = phone.length === 11 && phone.startsWith("7");
+      setErr("f-name",  !okName);
+      setErr("f-email", !okEmail);
+      setErr("f-phone", !okPhone);
+      return okName && okEmail && okPhone;
+    }
+    ["payName","payEmail","payPhone"].forEach(id => {
+      document.getElementById(id).addEventListener("input", () => {
+        const f = "f-"+id.replace(/^pay/,"").toLowerCase();
+        if (document.getElementById(f)?.classList.contains("is-error")) {
+          // снимаем ошибку как только начали править
+          setErr(f, false);
+        }
+      });
+    });
+
+    // Запуск оплаты с выбранным методом
+    function startPayment(payType){
+      if (TBANK_TERMINAL_KEY === "PUT_YOUR_TERMINAL_KEY_HERE") {
+        alert("Сначала впишите ваш Terminal Key T-Bank в файл payment/index.html (строка TBANK_TERMINAL_KEY).");
+        return;
+      }
+      if (!validate()) {
+        const firstErr = document.querySelector(".field.is-error input");
+        firstErr?.focus();
+        return;
+      }
+      // Заполняем скрытую T-Bank форму
+      document.getElementById("tbName").value  = document.getElementById("payName").value.trim();
+      document.getElementById("tbEmail").value = document.getElementById("payEmail").value.trim();
+      document.getElementById("tbPhone").value = document.getElementById("payPhone").value.trim();
+      document.getElementById("tbOrder").value = "edu-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8);
+      // PayType: SBP — Система Быстрых Платежей, BNPL — Долями. Пусто — карта.
+      document.getElementById("tbData").value  = payType ? ("PayType=" + payType) : "";
+
+      // Вызываем виджет T-Bank
+      const form = document.forms["TinkoffPayForm"];
+      if (typeof pay === "function") {
+        pay(form);
+      } else {
+        alert("Скрипт T-Bank не загрузился. Проверьте подключение к интернету.");
+      }
+    }
+
+    document.getElementById("btnCard").addEventListener("click", () => startPayment(""));
+    document.getElementById("btnSbp").addEventListener("click",  () => startPayment("SBP"));
+    document.getElementById("btnBnpl").addEventListener("click", () => startPayment("BNPL"));
+  </script>
+
+</body>
+</html>
