@@ -1,0 +1,811 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+  <meta name="googlebot" content="noindex, nofollow" />
+  <title>Educaty · AI-креатор — программа курса</title>
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Unbounded:wght@500;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --yellow:#ECF6A0;
+      --yellow-deep:#DDE986;
+      --cream:#FAF8EE;
+      --ink:#0A0A0A;
+      --ink-2:#121212;
+      --line:rgba(10,10,10,.12);
+      --line-on-dark:rgba(255,255,255,.14);
+      --muted:#5A5A55;
+      --muted-on-dark:#A6A6A0;
+      --display:"Unbounded","Inter",system-ui,sans-serif;
+      --body:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+      /* единица, привязанная к высоте экрана ТВ — всё масштабируется под 16:9 */
+      --u:min(0.86vw,1.52vh);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0;min-width:0}
+    html,body{height:100%}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:var(--body);
+      color:var(--ink);
+      background:var(--ink);
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+      overflow:hidden;
+    }
+    img,video{max-width:100%;display:block}
+
+    /* ---------- DECK ---------- */
+    .deck{
+      height:100vh;height:100dvh;
+      overflow-y:scroll;
+      scroll-snap-type:y mandatory;
+      scrollbar-width:none;
+    }
+    .deck::-webkit-scrollbar{display:none}
+    .slide{
+      position:relative;
+      height:100vh;height:100dvh;
+      scroll-snap-align:start;scroll-snap-stop:always;
+      display:flex;align-items:center;justify-content:center;
+      padding:calc(var(--u)*7.5) calc(var(--u)*7) calc(var(--u)*4.5);
+      overflow:hidden;
+    }
+    .slide-inner{width:100%;max-width:calc(var(--u)*100);margin:0 auto;transform-origin:center center}
+
+    .display{font-family:var(--display);font-weight:800;letter-spacing:-.025em;line-height:.95}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:calc(var(--u)*1);
+      font-size:calc(var(--u)*1.45);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+      padding:calc(var(--u)*0.9) calc(var(--u)*1.7);border:1px solid var(--line);border-radius:999px;
+      background:rgba(255,255,255,.5);
+    }
+    .eyebrow .dot{width:calc(var(--u)*0.7);height:calc(var(--u)*0.7);border-radius:999px;background:var(--ink);display:inline-block}
+    .eyebrow.on-dark{border-color:var(--line-on-dark);background:rgba(255,255,255,.06);color:#fff}
+    .eyebrow.on-dark .dot{background:var(--yellow)}
+    .eyebrow.on-yellow{background:rgba(10,10,10,.07);border-color:rgba(10,10,10,.12);color:var(--ink)}
+
+    /* фон-варианты */
+    .bg-yellow{background:var(--yellow);color:var(--ink)}
+    .bg-cream{background:var(--cream);color:var(--ink)}
+    .bg-ink{background:var(--ink);color:#fff}
+
+    /* ---------- слайд 1: ЗАСТАВКА / HERO ---------- */
+    .hero .slide-inner{display:grid;grid-template-columns:1.4fr .9fr;gap:calc(var(--u)*6);align-items:center;max-width:calc(var(--u)*110)}
+    .hero::before{
+      content:"";position:absolute;inset:auto -10% -30% auto;width:60%;height:70%;
+      background:radial-gradient(closest-side,rgba(255,255,255,.55),transparent 70%);
+      filter:blur(20px);pointer-events:none;
+    }
+    .hero h1{font-size:calc(var(--u)*7.4);margin:0;position:relative;z-index:1}
+    .hero h1 .first{font-weight:700;color:var(--ink)}
+    .hero h1 .accent{position:relative;display:inline-block;color:var(--ink);font-weight:800;font-style:italic;padding:0 .04em .14em}
+    .hero h1 .accent svg{position:absolute;left:0;right:0;bottom:.02em;width:100%;height:.2em;overflow:visible;pointer-events:none}
+    .hero h1 .accent svg path{stroke:var(--ink);stroke-width:6;stroke-linecap:round;fill:none;vector-effect:non-scaling-stroke}
+    .hero .sub{font-size:calc(var(--u)*2.05);max-width:42ch;opacity:.84;margin:calc(var(--u)*2.8) 0 0;line-height:1.5}
+    .hero .school{margin-top:calc(var(--u)*3.4);display:flex;gap:calc(var(--u)*1.4);flex-wrap:wrap}
+    .hero .pill{display:inline-flex;align-items:center;gap:calc(var(--u)*1);background:rgba(10,10,10,.07);border:1px solid rgba(10,10,10,.1);padding:calc(var(--u)*1) calc(var(--u)*1.7);border-radius:999px;font-size:calc(var(--u)*1.5);font-weight:600}
+    .hero .pill .dot{width:calc(var(--u)*0.7);height:calc(var(--u)*0.7);border-radius:999px;background:var(--ink)}
+    .hero-video{
+      border-radius:calc(var(--u)*3);overflow:hidden;position:relative;background:#0F0F0F;
+      aspect-ratio:9/12;max-height:68vh;margin-left:auto;
+      box-shadow:0 30px 60px -28px rgba(10,10,10,.55);transform:rotate(-1.2deg);
+    }
+    .hero-video video{width:100%;height:100%;object-fit:cover}
+    .hero-logo{position:absolute;top:calc(var(--u)*4);left:calc(var(--u)*7);height:calc(var(--u)*3);z-index:2}
+
+    /* ---------- слайд-разделитель ПРОГРАММА ---------- */
+    .divider .slide-inner{text-align:center;max-width:calc(var(--u)*80)}
+    .divider h2{font-family:var(--display);font-weight:800;font-size:calc(var(--u)*7);line-height:.98;letter-spacing:-.02em;margin:calc(var(--u)*2.6) 0 0}
+    .divider .lead{font-size:calc(var(--u)*2.1);color:var(--muted);max-width:54ch;margin:calc(var(--u)*2.8) auto 0;line-height:1.55}
+    .divider .flow{display:flex;gap:calc(var(--u)*1.2);justify-content:center;flex-wrap:wrap;margin-top:calc(var(--u)*4)}
+    .divider .chip{font-size:calc(var(--u)*1.55);font-weight:600;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:calc(var(--u)*1.1) calc(var(--u)*1.9)}
+    .divider .chip.hl{background:var(--yellow);color:var(--ink);border-color:var(--yellow)}
+
+    /* ---------- слайды МОДУЛЕЙ ---------- */
+    /* контент прижат к верху — заголовки и описания на одной высоте на всех слайдах */
+    .slide.module{align-items:flex-start}
+    .module .slide-inner{display:grid;grid-template-columns:calc(var(--u)*26) 1fr;gap:calc(var(--u)*6);align-items:start;max-width:calc(var(--u)*112);transform-origin:left top}
+    .module .col-l{position:relative}
+    .module .num{font-family:var(--display);font-weight:800;font-size:calc(var(--u)*13);line-height:.82;letter-spacing:-.03em;color:var(--ink)}
+    .module .cat{display:inline-block;margin-top:calc(var(--u)*1.8);font-size:calc(var(--u)*1.4);letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--ink);background:var(--yellow);border-radius:999px;padding:calc(var(--u)*0.7) calc(var(--u)*1.5)}
+    .module .of{margin-top:calc(var(--u)*2.6);font-size:calc(var(--u)*1.4);letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:rgba(10,10,10,.42)}
+    .module h3{font-family:var(--display);font-weight:700;font-size:calc(var(--u)*3.9);line-height:1.05;letter-spacing:-.015em;margin:0;color:var(--ink)}
+    .module .tag{
+      display:inline-block;vertical-align:middle;margin-left:calc(var(--u)*1.4);
+      font-size:calc(var(--u)*1.2);letter-spacing:.16em;text-transform:uppercase;font-weight:700;
+      color:var(--ink);background:var(--yellow);border-radius:999px;padding:calc(var(--u)*0.6) calc(var(--u)*1.3);transform:translateY(-.35em)
+    }
+    .module .desc{font-size:calc(var(--u)*1.7);color:var(--muted);line-height:1.5;max-width:64ch;margin:calc(var(--u)*1.3) 0 calc(var(--u)*2.2)}
+    .module .lessons{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:0 calc(var(--u)*4)}
+    .module .lessons.one-col{grid-template-columns:1fr}
+    .module .lessons li{
+      border-top:1px solid var(--line);
+      padding:calc(var(--u)*0.85) 0 calc(var(--u)*0.85) calc(var(--u)*2.2);
+      position:relative;font-size:calc(var(--u)*1.42);line-height:1.34;color:var(--ink-2);
+    }
+    .module .lessons li::before{content:"";position:absolute;left:0;top:calc(var(--u)*1.6);width:calc(var(--u)*1.3);height:2px;background:var(--ink)}
+
+    /* лента работ внутри модуля — на одном экране, по левому краю описания */
+    .module .works{grid-column:2/-1;display:flex;gap:calc(var(--u)*1);justify-content:flex-start;margin-top:calc(var(--u)*1.4)}
+    .module .works figure{margin:0;height:25vh;aspect-ratio:9/16;border-radius:calc(var(--u)*1.4);overflow:hidden;background:#111;box-shadow:0 14px 28px -16px rgba(10,10,10,.35)}
+    .module .works img,.module .works video{width:100%;height:100%;object-fit:cover}
+    /* компактнее на слайдах с лентой работ: логотип внизу — верхний отступ меньше */
+    .slide.module:has(.works){padding-top:calc(var(--u)*4.5)}
+    .module:has(.works) .lessons li{padding-top:calc(var(--u)*0.62);padding-bottom:calc(var(--u)*0.62);font-size:calc(var(--u)*1.36)}
+    .module:has(.works) .desc{margin-top:calc(var(--u)*1);margin-bottom:calc(var(--u)*1.5);max-width:none}
+    .module:has(.works) .works{margin-top:calc(var(--u)*1)}
+
+    /* вертикальное видео справа от программы модуля — сетка как у остальных модулей */
+    .module.with-video .slide-inner{grid-template-columns:calc(var(--u)*26) 1fr calc(var(--u)*26)}
+    .mvideo{position:relative;margin:0;border-radius:calc(var(--u)*2);overflow:hidden;background:#0F0F0F;aspect-ratio:9/16;max-height:70vh;align-self:center;justify-self:end;box-shadow:0 24px 48px -24px rgba(10,10,10,.4)}
+    .mvideo video{width:100%;height:100%;object-fit:cover}
+
+    /* кнопка звука (в стиле Instagram) */
+    .sndbtn{
+      position:absolute;right:calc(var(--u)*1.2);bottom:calc(var(--u)*1.2);
+      width:calc(var(--u)*3.6);height:calc(var(--u)*3.6);border-radius:999px;
+      background:rgba(10,10,10,.55);backdrop-filter:blur(6px);
+      border:1px solid rgba(255,255,255,.3);
+      display:grid;place-items:center;cursor:pointer;padding:0;z-index:4;
+      transition:transform .2s ease, background .2s ease;
+    }
+    .sndbtn:hover{transform:scale(1.08);background:rgba(10,10,10,.75)}
+    .sndbtn svg{width:58%;height:58%;display:block}
+    .sndbtn .ic-on{display:none}
+    .sndbtn.unmuted .ic-on{display:block}
+    .sndbtn.unmuted .ic-off{display:none}
+
+    /* ---------- слайды-сториз с сериями работ ---------- */
+    .stories .slide-inner{max-width:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u)*2.2)}
+    .stories .rail{display:flex;gap:calc(var(--u)*1.2)}
+    .stories .rail figure{margin:0;height:36vh;aspect-ratio:9/16;border-radius:calc(var(--u)*1.6);overflow:hidden;background:#111;box-shadow:0 14px 28px -16px rgba(10,10,10,.3)}
+    .stories .rail img,.stories .rail video{width:100%;height:100%;object-fit:cover}
+    /* одиночная крупная лента работ модуля */
+    .stories .rail.xl figure{height:37vh}
+
+    /* ---------- слайд КОМЬЮНИТИ ---------- */
+    .community .slide-inner{display:grid;grid-template-columns:.95fr 1.25fr;gap:calc(var(--u)*5);align-items:center;max-width:calc(var(--u)*114)}
+    .community h2{font-family:var(--display);font-weight:800;font-size:calc(var(--u)*3.4);line-height:1.06;letter-spacing:-.02em;margin:calc(var(--u)*2.8) 0 0}
+    .community .lead{font-size:calc(var(--u)*1.85);color:var(--muted);line-height:1.55;margin:calc(var(--u)*2.2) 0 0;max-width:46ch}
+    .community .pills{display:flex;flex-wrap:wrap;gap:calc(var(--u)*1);margin-top:calc(var(--u)*3)}
+    .community .pills .p{display:inline-flex;align-items:center;gap:calc(var(--u)*1);background:var(--yellow);color:var(--ink);border-radius:999px;padding:calc(var(--u)*0.95) calc(var(--u)*1.6);font-size:calc(var(--u)*1.45);font-weight:600}
+    .community .pills .p .dot{width:calc(var(--u)*0.65);height:calc(var(--u)*0.65);border-radius:999px;background:var(--ink)}
+    .cgrid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:calc(var(--u)*8.4);gap:calc(var(--u)*1.4);height:72vh}
+    .cgrid figure{margin:0;border-radius:calc(var(--u)*2);overflow:hidden;background:#0F0F0F;position:relative}
+    .cgrid img,.cgrid video{width:100%;height:100%;object-fit:cover}
+    .cgrid .c1{grid-column:1/3;grid-row:1/4}
+    .cgrid .c2{grid-column:3/5;grid-row:1/3}
+    .cgrid .c3{grid-column:3/4;grid-row:3/5}
+    .cgrid .c4{grid-column:4/5;grid-row:3/5}
+    .cgrid .c5{grid-column:1/2;grid-row:4/6}
+    .cgrid .c6{grid-column:2/3;grid-row:4/6}
+    .cgrid .c7{grid-column:3/5;grid-row:5/6}
+    .cgrid .label{position:absolute;left:calc(var(--u)*1.2);bottom:calc(var(--u)*1.2);display:inline-flex;align-items:center;gap:calc(var(--u)*0.8);background:rgba(255,255,255,.94);color:var(--ink);font-size:calc(var(--u)*1.15);letter-spacing:.06em;text-transform:uppercase;font-weight:600;padding:calc(var(--u)*0.7) calc(var(--u)*1.2);border-radius:999px}
+    .cgrid .label .dot{width:calc(var(--u)*0.6);height:calc(var(--u)*0.6);border-radius:999px;background:#E94B4B;animation:pulse 1.8s ease-in-out infinite}
+    @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(233,75,75,.6)}50%{box-shadow:0 0 0 calc(var(--u)*0.9) rgba(233,75,75,0)}}
+
+    /* ---------- слайд ДИПЛОМ ---------- */
+    .diploma .slide-inner{display:grid;grid-template-columns:1fr 1fr;gap:calc(var(--u)*6);align-items:center;max-width:calc(var(--u)*108)}
+    .diploma h2{font-family:var(--display);font-weight:800;font-size:calc(var(--u)*6.2);line-height:1.0;letter-spacing:-.02em;margin:calc(var(--u)*2.4) 0 0}
+    .diploma .lead{font-size:calc(var(--u)*2.05);opacity:.8;line-height:1.55;margin:calc(var(--u)*2.6) 0 0;max-width:42ch}
+    .cert{
+      aspect-ratio:1.41/1;background:#fff;color:var(--ink);border-radius:calc(var(--u)*2);
+      box-shadow:0 40px 80px -30px rgba(0,0,0,.6);
+      padding:calc(var(--u)*4);display:flex;flex-direction:column;
+      border:calc(var(--u)*0.5) solid var(--yellow);position:relative;overflow:hidden;
+      transform:rotate(-1.5deg);
+    }
+    .cert::before{content:"";position:absolute;inset:calc(var(--u)*1.2);border:1px solid var(--line);border-radius:calc(var(--u)*1);pointer-events:none}
+    .cert .ct-top{display:flex;align-items:center;justify-content:space-between}
+    .cert .ct-logo{height:calc(var(--u)*2.4)}
+    .cert .ct-seal{width:calc(var(--u)*6);height:calc(var(--u)*6);border-radius:999px;background:var(--yellow);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:calc(var(--u)*1.4);text-align:center;line-height:1;letter-spacing:.04em}
+    .cert .ct-k{margin-top:calc(var(--u)*3);font-size:calc(var(--u)*1.3);letter-spacing:.24em;text-transform:uppercase;color:var(--muted);font-weight:600}
+    .cert .ct-h{font-family:var(--display);font-weight:800;font-size:calc(var(--u)*3.4);line-height:1.04;letter-spacing:-.02em;margin-top:calc(var(--u)*0.8)}
+    .cert .ct-line{margin-top:auto;height:1px;background:var(--line)}
+    .cert .ct-foot{display:flex;justify-content:space-between;align-items:flex-end;margin-top:calc(var(--u)*1.6);font-size:calc(var(--u)*1.25);color:var(--muted)}
+    .cert .ct-foot b{display:block;font-family:var(--display);color:var(--ink);font-size:calc(var(--u)*1.5)}
+
+    /* ---------- ФИНАЛ ---------- */
+    .finale{padding:0}
+    .finale .slide-inner{max-width:none;width:100%;height:100%;position:relative}
+    .fgrid{display:grid;grid-template-columns:1.15fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:calc(var(--u)*1.2);height:100%;padding:calc(var(--u)*1.2)}
+    .fgrid figure{margin:0;border-radius:calc(var(--u)*2);overflow:hidden;background:#0F0F0F;position:relative}
+    .fgrid img,.fgrid video{width:100%;height:100%;object-fit:cover}
+    .fvid{grid-column:1/2;grid-row:1/3}
+    .ff1{grid-column:2/3;grid-row:1/2}
+    .ff2{grid-column:3/4;grid-row:1/2}
+    .ff3{grid-column:2/3;grid-row:2/3}
+    .ff4{grid-column:3/4;grid-row:2/3}
+    .finale .overlay{
+      position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      text-align:center;pointer-events:none;
+    }
+    .finale .overlay .box{
+      background:rgba(10,10,10,.62);backdrop-filter:blur(6px);
+      border:1px solid var(--line-on-dark);border-radius:calc(var(--u)*3);
+      padding:calc(var(--u)*4.5) calc(var(--u)*6);max-width:calc(var(--u)*78);
+    }
+    .finale h2{font-family:var(--display);font-weight:800;color:#fff;font-size:calc(var(--u)*5.6);line-height:1.0;letter-spacing:-.02em}
+    .finale h2 em{font-style:italic;color:var(--yellow)}
+    .finale p{color:rgba(255,255,255,.85);font-size:calc(var(--u)*2.05);line-height:1.5;margin-top:calc(var(--u)*2.2);max-width:46ch;margin-left:auto;margin-right:auto}
+    .finale .brand{margin-top:calc(var(--u)*2.6);font-family:var(--display);font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--yellow);font-size:calc(var(--u)*1.7)}
+    .finale .brand-logo{display:block;margin:calc(var(--u)*2.4) auto 0;height:calc(var(--u)*3);width:auto;filter:invert(1) brightness(2)}
+
+    /* ---------- общий футер слайда (номер + лого) ---------- */
+    .mark{position:absolute;top:calc(var(--u)*3.2);left:calc(var(--u)*7);height:calc(var(--u)*2.3);width:auto;z-index:3;opacity:.92}
+    .mark.on-dark{filter:invert(1) brightness(1.8)}
+    /* на слайдах модулей (00–10) и их галерей логотип — в правом нижнем углу,
+       фиксированная позиция и единый размер */
+    .module .mark,.stories .mark{top:auto;left:auto;bottom:calc(var(--u)*3);right:calc(var(--u)*7)}
+
+    /* ---------- индикатор-точки ---------- */
+    .dots{position:fixed;right:calc(var(--u)*2.4);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:calc(var(--u)*1);z-index:40}
+    .dots button{width:calc(var(--u)*0.85);height:calc(var(--u)*0.85);border-radius:999px;border:none;background:rgba(255,255,255,.35);cursor:pointer;padding:0;transition:all .25s ease}
+    .dots button.dark{background:rgba(10,10,10,.3)}
+    .dots button.active{background:var(--yellow);transform:scale(1.5)}
+
+    /* подсказка на первом экране */
+    .hint{position:absolute;bottom:calc(var(--u)*3);left:50%;transform:translateX(-50%);font-size:calc(var(--u)*1.4);letter-spacing:.16em;text-transform:uppercase;font-weight:600;opacity:.55;z-index:3;display:flex;align-items:center;gap:calc(var(--u)*1)}
+    .hint .arr{animation:bob 1.6s ease-in-out infinite}
+    @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(.4em)}}
+  </style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- 1 · ЗАСТАВКА -->
+  <section class="slide hero bg-yellow">
+    <img class="mark" src="../assets/img/logo.png" alt="Educaty"/>
+    <div class="slide-inner">
+      <div>
+        <h1 class="display">
+          <span class="first">Я — креатор.</span><br/>
+          <span class="accent">AI — креатор.<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M2 12 C 20 4, 40 18, 60 10 S 100 4, 120 12 S 160 18, 198 8"/></svg></span>
+        </h1>
+        <p class="sub">Создавай контент мирового уровня без камер, съёмок и границ. Один ноутбук, один курс — и навыки, которые работают на тебя каждый день.</p>
+        <div class="school">
+          <span class="pill"><span class="dot"></span>Фото · Видео · Анимация</span>
+          <span class="pill"><span class="dot"></span>11 модулей</span>
+          <span class="pill"><span class="dot"></span>От ДНК бренда до дохода</span>
+        </div>
+      </div>
+      <figure class="hero-video">
+        <video src="../assets/showcase/miu-miu.mp4" poster="../assets/showcase/miu-miu_poster.jpg" autoplay muted loop playsinline preload="auto"></video>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 2 · РАЗДЕЛИТЕЛЬ ПРОГРАММА -->
+  <section class="slide divider bg-cream">
+    <img class="mark" src="../assets/img/logo.png" alt="Educaty"/>
+    <div class="slide-inner">
+      <span class="eyebrow on-yellow"><span class="dot"></span>Программа курса</span>
+      <h2>11 модулей: от старта<br/>до стабильного дохода.</h2>
+      <p class="lead">Системный путь профессионала AI-визуала. От считывания ДНК бренда и первых генераций — до коммерческих съёмок, видео, анимации и работы с реальными клиентами.</p>
+      <div class="flow">
+        <span class="chip hl">Старт</span>
+        <span class="chip">Стратегия</span>
+        <span class="chip">Инструменты</span>
+        <span class="chip">Фотогенерация</span>
+        <span class="chip">Коммерческая съёмка</span>
+        <span class="chip">Видео</span>
+        <span class="chip">Аватары</span>
+        <span class="chip">Анимация</span>
+        <span class="chip hl">Деньги</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · МОДУЛЬ 00 СТАРТ -->
+  <section class="slide module bg-cream">
+    <img class="mark" src="../assets/img/logo.png" alt="Educaty"/>
+    <div class="slide-inner">
+      <div class="col-l">
+        <div class="num">00</div>
+        <div class="cat">Старт</div>
+        <div class="of">Вводный блок</div>
+      </div>
+      <div class="col-r">
+        <h3>Старт</h3>
+        <p class="desc">Настраиваемся на работу и видим, какого уровня результат реально создавать нейросетями уже сегодня.</p>
+        <ul class="lessons">
+          <li>Знакомство и карта курса: путь от первых генераций до коммерческих заказов</li>
+          <li>Возможности нейросетей сегодня: визуал уровня брендовых кампаний</li>
+          <li>Что понадобится для работы: доступы, подписки, оборудование</li>
+          <li>Профессиональный подход: как выстроить систему, а не распыляться на инструменты</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · МОДУЛЬ 01 СТРАТЕГИЯ -->
+  <section class="slide module bg-cream">
+    <img class="mark" src="../assets/img/logo.png" alt="Educaty"/>
+    <div class="slide-inner">
+      <div class="col-l">
+        <div class="num">01</div>
+        <div class="cat">Стратегия</div>
+        <div class="of">Модуль 1 из 11</div>
+      </div>
+      <div class="col-r">
+        <h3>Бренд, рынок и идея</h3>
+        <p class="desc">С этого начинается профессионал. Учимся считывать ДНК бренда, читать рынок и превращать это в точную идею для съёмки. Без этого слоя любая генерация — просто картинка, а не работа, за которую платят.</p>
+        <ul class="lessons">
+          <li>ДНК бренда: почему сильный визуал начинается именно с него</li>
+          <li>Визуальный язык бренда: цвет, настроение, эстетика, tone of voice</li>
+          <li>Анализ конкурентов и рынка: как читать тех, кто задаёт планку</li>
+          <li>Насмотренность: где искать референсы мирового уровня</li>
+          <li>Своя визуальная библиотека: как собирать и хранить референсы</li>
+          <li>Работа с референсами: вдохновляться, а не копировать</li>
+          <li>Идея как система: рождаем концепции под задачу, а не ждём вдохновения</li>
+          <li>Концепция съёмки под конкретный бренд</li>
+          <li>Креативный бриф и мудборд: рабочие инструменты арт-директора</li>
+        </ul>
+      </div>
+      <div class="works">
+        <figure><video src="../assets/presentation/idea.mp4" poster="../assets/presentation/idea_poster.jpg" autoplay muted loop playsinline preload="metadata"></video></figure>
+        <figure><img src="../assets/presentation/idea/idea_01.jpg" alt="Работа модуля" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/idea/idea_02.jpg" alt="Работа модуля" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/idea/idea_03.jpg" alt="Работа модуля" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/idea/idea_04.jpg" alt="Работа модуля" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/idea/idea_05.jpg" alt="Работа модуля" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/idea/idea_06.jpg" alt="Работа модуля" loading="lazy"/></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · МОДУЛЬ 02 ТЕКСТОВЫЕ НЕЙРОСЕТИ -->
+  <section class="slide module bg-cream">
+    <img class="mark" src="../assets/img/logo.png" alt="Educaty"/>
+    <div class="slide-inner">
+      <div class="col-l">
+        <div class="num">02</div>
+        <div class="cat">Инструменты</div>
+        <div class="of">Модуль 2 из 11</div>
+      </div>
+      <div class="col-r">
+        <h3>Текстовые нейросети: ChatGPT</h3>
+        <p class="desc">Текстовые нейросети — рабочий инструмент профессионала. Разбираем, что умеет ChatGPT и как он усиливает работу на каждом этапе.</p>
+        <ul class="lessons one-col">
+          <li>Возможности ChatGPT: где он реально помогает в нашей работе</li>
+          <li>Бесплатная и платная версии: за что стоит платить, а где можно обойтись</li>
+          <li>С чего начать работу с ChatGPT</li>
+          <li>Как ChatGPT работает на нас: от стратегии и брифов до готовых промптов</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · МОДУЛЬ 03 БАЗА МАСТЕРСТВА -->
+  <section class="slide module bg-cream">
+    <img class="mark" src="../assets/img/logo.png" alt="Educaty"/>
+    <div class="slide-inner">
+      <div class="col-l">
+        <div class="num">03</div>
+        <div class="cat">Фотогенерация · I</div>
+        <div class="of">Модуль 3 из 11</div>
+      </div>
+      <div class="col-r">
+        <h3>База мастерства</h3>
+        <p class="desc">Осваиваем ключевые нейросети и формируем профессиональную базу, на которой строится вся дальнейшая работа.</p>
+        <ul class="lessons">
+          <li>Midjourney: интерфейс и логика инструмента</li>
+          <li>Промптинг в Midjourney: нюансы, что отделяют профессиональный результат от любительского</li>
+          <li>Настройка Midjourney под себя</li>
+          <li>Собственный визуальный почерк: персонализации</li>
+          <li>Первая осознанная генерация уровня, который не стыдно показать клиенту</li>
+          <li>Higgsfield: полный разбор возможностей нейросети</li>
+          <li>Выбор инструмента под задачу: когда что использовать</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 · МОДУЛЬ 04 КОММЕРЧЕСКАЯ СЪЁМКА -->
+  <section class="slide module bg-cream">
+    <img class="mark" src="../assets/img/logo.png" alt="Educaty"/>
+    <div class="slide-inner">
+      <div class="col-l">
+        <div class="num">04</div>
+        <div class="cat">Фотогенерация · II</div>
+        <div class="of">Модуль 4 из 11</div>
+      </div>
+      <div class="col-r">
+        <h3>Коммерческая съёмка</h3>
+        <p class="desc">Ядро курса и навык, за который платят бренды. Создаём коммерческий визуал под реальный продукт клиента — уровня каталога и рекламной кампании.</p>
+        <ul class="lessons">
+          <li>Nano Banana: ключевой инструмент коммерческой съёмки</li>
+          <li>Перенос продукта: реальный товар клиента в генерации</li>
+          <li>Работа с одеждой на модели: посадка, фактура, достоверность</li>
+          <li>Предметная съёмка: бьюти-продукты, украшения, сумки и аксессуары</li>
+          <li>Нижнее бельё и купальники: деликатная коммерческая съёмка</li>
+          <li>Консистентность: единый образ и модель во всей серии</li>
+          <li>Профессиональная ретушь: доводка до коммерческого качества</li>
+          <li>Апскейл: подготовка визуала к печати и крупным форматам</li>
+          <li>Лукбук и каталог: сборка готовой съёмки уровня бренда</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- РАБОТЫ · КОММЕРЧЕСКАЯ СЪЁМКА I -->
+  <section class="slide stories bg-cream">
+    <img class="mark" src="../assets/img/logo.png" alt="Educaty"/>
+    <div class="slide-inner">
+      <div class="rail">
+        <figure><img src="../assets/presentation/comm1/comm1_01.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/comm1/comm1_02.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/comm1/comm1_03.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/comm1/comm1_04.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/comm1/comm1_05.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/comm1/comm1_06.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+      </div>
+      <div class="rail">
+        <figure><img src="../assets/presentation/comm2/comm2_01.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/comm2/comm2_02.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/comm2/comm2_03.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/comm2/comm2_04.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/comm2/comm2_05.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/comm2/comm2_06.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- РАБОТЫ · КОММЕРЧЕСКАЯ СЪЁМКА II -->
+  <section class="slide stories bg-cream">
+    <img class="mark" src="../assets/img/logo.png" alt="Educaty"/>
+    <div class="slide-inner">
+      <div class="rail">
+        <figure><img src="../assets/presentation/comm3/comm3_01.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/comm3/comm3_02.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/comm3/comm3_03.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/comm3/comm3_04.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/comm3/comm3_05.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/comm3/comm3_06.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+      </div>
+      <div class="rail">
+        <figure><img src="../assets/presentation/comm4/comm4_01.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/comm4/comm4_02.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/comm4/comm4_03.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/comm4/comm4_04.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/comm4/comm4_05.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/comm4/comm4_06.jpg" alt="Коммерческая съёмка" loading="lazy"/></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · МОДУЛЬ 05 НЕЙРОФОТОСЕССИЯ -->
+  <section class="slide module bg-cream">
+    <img class="mark" src="../assets/img/logo.png" alt="Educaty"/>
+    <div class="slide-inner">
+      <div class="col-l">
+        <div class="num">05</div>
+        <div class="cat">Личный бренд</div>
+        <div class="of">Модуль 5 из 11</div>
+      </div>
+      <div class="col-r">
+        <h3>Нейрофотосессия со своим лицом</h3>
+        <p class="desc">Создаём фотосессии с собственным или клиентским лицом — формат, который расширяет портфолио и продаётся как отдельная премиальная услуга.</p>
+        <ul class="lessons">
+          <li>Что такое нейрофотосессия и где она востребована</li>
+          <li>Обзор самых передовых моделей для фотосессий со своим лицом</li>
+          <li>Создаём первую нейрофотосессию</li>
+          <li>Консистентное лицо: один человек в разных образах и сценах</li>
+          <li>Доработка и апскейл результата до коммерческого качества</li>
+          <li>Как упаковать нейрофотосессию в самостоятельную услугу</li>
+        </ul>
+      </div>
+      <div class="works">
+        <figure><img src="../assets/presentation/neuro/neuro_01.jpg" alt="Нейрофотосессия" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/neuro/neuro_02.jpg" alt="Нейрофотосессия" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/neuro/neuro_03.jpg" alt="Нейрофотосессия" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/neuro/neuro_04.jpg" alt="Нейрофотосессия" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/neuro/neuro_05.jpg" alt="Нейрофотосессия" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/neuro/neuro_06.jpg" alt="Нейрофотосессия" loading="lazy"/></figure>
+        <figure><img src="../assets/presentation/neuro/neuro_07.jpg" alt="Нейрофотосессия" loading="lazy"/></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 · МОДУЛЬ 06 ВИДЕОГЕНЕРАЦИЯ -->
+  <section class="slide module with-video bg-cream">
+    <img class="mark" src="../assets/img/logo.png" alt="Educaty"/>
+    <div class="slide-inner">
+      <div class="col-l">
+        <div class="num">06</div>
+        <div class="cat">Видео</div>
+        <div class="of">Модуль 6 из 11</div>
+      </div>
+      <div class="col-r">
+        <h3>Видеогенерация</h3>
+        <p class="desc">Оживляем визуал: от первого ролика до рекламного видео уровня кампании.</p>
+        <ul class="lessons">
+          <li>Обзор платформ, на которых будем работать</li>
+          <li>Обзор моделей видеогенерации и их сильные стороны</li>
+          <li>Генерация ролика с людьми</li>
+          <li>Генерация с предметкой: продукт в движении</li>
+          <li>Морфинг и трансформации: эффектное превращение одного кадра в другой</li>
+          <li>Консистентность в видео: чтобы модель и продукт держали форму</li>
+          <li>Рекламный ролик под бренд: от идеи до готового видео</li>
+          <li>Форматы под площадки: вертикаль, горизонталь, Reels, Shorts</li>
+        </ul>
+      </div>
+      <figure class="mvideo">
+        <video src="../assets/presentation/brand.mp4" poster="../assets/presentation/brand_poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 10 · МОДУЛЬ 07 ПОСТПРОДАКШН -->
+  <section class="slide module with-video bg-cream">
+    <img class="mark" src="../assets/img/logo.png" alt="Educaty"/>
+    <div class="slide-inner">
+      <div class="col-l">
+        <div class="num">07</div>
+        <div class="cat">Постпродакшн</div>
+        <div class="of">Модуль 7 из 11</div>
+      </div>
+      <div class="col-r">
+        <h3>Монтаж и саунд-дизайн<span class="tag">Бонус</span></h3>
+        <p class="desc">Финальная сборка: отдаём клиенту готовый продукт, а не сырые ролики.</p>
+        <ul class="lessons one-col">
+          <li>Базовый монтаж: собираем ролик из сгенерированных фрагментов</li>
+          <li>Саунд-дизайн: музыка, звук, атмосфера</li>
+          <li>Переходы, темп и ритм рекламного видео</li>
+          <li>Сборка финального ролика уровня бренда</li>
+        </ul>
+      </div>
+      <figure class="mvideo">
+        <video id="clientVid" src="../assets/presentation/client.mp4" poster="../assets/presentation/client_poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
+        <button class="sndbtn" id="sndBtn" aria-label="Включить звук">
+          <svg class="ic-off" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.5 9.2v5.6h3.6l5 4.1V5.1l-5 4.1H3.5z" fill="#fff"/>
+            <path d="M15.8 9.6l5 4.8M20.8 9.6l-5 4.8" stroke="#fff" stroke-width="1.9" stroke-linecap="round"/>
+          </svg>
+          <svg class="ic-on" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.5 9.2v5.6h3.6l5 4.1V5.1l-5 4.1H3.5z" fill="#fff"/>
+            <path d="M15.6 9a5 5 0 010 6" stroke="#fff" stroke-width="1.9" stroke-linecap="round"/>
+            <path d="M18.2 6.8a8.6 8.6 0 010 10.4" stroke="#fff" stroke-width="1.9" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 11 · МОДУЛЬ 08 АВАТАРЫ -->
+  <section class="slide module bg-cream">
+    <img class="mark" src="../assets/img/logo.png" alt="Educaty"/>
+    <div class="slide-inner">
+      <div class="col-l">
+        <div class="num">08</div>
+        <div class="cat">Аватары</div>
+        <div class="of">Модуль 8 из 11</div>
+      </div>
+      <div class="col-r">
+        <h3>Липсинк и говорящие персонажи</h3>
+        <p class="desc">Создаём говорящих моделей и аватаров, добавляем голос и музыку — отдельная востребованная ниша.</p>
+        <ul class="lessons one-col">
+          <li>Что такое липсинк и где он применяется в коммерции</li>
+          <li>Создаём говорящего аватара и модель бренда</li>
+          <li>Озвучка: голос, текст, синхронизация</li>
+          <li>Создание музыки нейросетями</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 · МОДУЛЬ 09 АНИМАЦИЯ -->
+  <section class="slide module with-video bg-cream">
+    <img class="mark" src="../assets/img/logo.png" alt="Educaty"/>
+    <div class="slide-inner">
+      <div class="col-l">
+        <div class="num">09</div>
+        <div class="cat">Анимация</div>
+        <div class="of">Модуль 9 из 11</div>
+      </div>
+      <div class="col-r">
+        <h3>Анимация и мультики</h3>
+        <p class="desc">Расширяем арсенал: анимация выделяет бренд на фоне всех остальных.</p>
+        <ul class="lessons one-col">
+          <li>Идея и сценарий мультика</li>
+          <li>Раскадровка: продумываем кадры заранее</li>
+          <li>Оживление: превращаем раскадровку в видео</li>
+          <li>Озвучка персонажей</li>
+        </ul>
+      </div>
+      <figure class="mvideo">
+        <video src="../assets/presentation/animation.mp4" poster="../assets/presentation/animation_poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 13 · МОДУЛЬ 10 ДЕНЬГИ -->
+  <section class="slide module bg-cream">
+    <img class="mark" src="../assets/img/logo.png" alt="Educaty"/>
+    <div class="slide-inner">
+      <div class="col-l">
+        <div class="num">10</div>
+        <div class="cat">Деньги</div>
+        <div class="of">Модуль 10 из 11</div>
+      </div>
+      <div class="col-r">
+        <h3>Как зарабатывать на нейросетях</h3>
+        <p class="desc">Превращаем навык в системный доход — от первых заказов до собственной студии.</p>
+        <ul class="lessons">
+          <li>Ниши и роли на рынке AI-визуала: где деньги</li>
+          <li>Упаковка специалиста: позиционирование и портфолио, что продаёт</li>
+          <li>Поиск клиентов: соцсети, площадки, прямой выход на бренды</li>
+          <li>Ценообразование: сколько стоит фото, видео и проект под ключ</li>
+          <li>Ведение проекта: от брифа до сдачи без бесконечных правок</li>
+          <li>Личный бренд и кейсы: чтобы клиенты приходили сами</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 · AI-КОМЬЮНИТИ -->
+  <section class="slide community bg-cream">
+    <img class="mark" src="../assets/img/logo.png" alt="Educaty"/>
+    <div class="slide-inner">
+      <div>
+        <span class="eyebrow on-yellow"><span class="dot"></span>AI-комьюнити Educaty</span>
+        <h2>Не только курс.<br/>Живое комьюнити единомышленников.</h2>
+        <p class="lead">Помимо онлайн-занятий, мы проводим лекции и мероприятия в офлайн- и онлайн-форматах. Уникальная возможность обменяться опытом, найти единомышленников и вдохновиться новыми идеями.</p>
+        <div class="pills">
+          <span class="p"><span class="dot"></span>Лекции с приглашёнными спикерами</span>
+          <span class="p"><span class="dot"></span>Тематические вечеринки</span>
+          <span class="p"><span class="dot"></span>Офлайн в Петербурге + онлайн</span>
+          <span class="p"><span class="dot"></span>Бесплатно для учеников курса</span>
+        </div>
+      </div>
+      <div class="cgrid">
+        <figure class="c1"><video src="../assets/community/educaty.mp4" poster="../assets/community/educaty_poster.jpg" autoplay muted loop playsinline preload="auto"></video><span class="label"><span class="dot"></span>Вечеринки Educaty</span></figure>
+        <figure class="c2"><img src="../assets/community/c_5.jpg" alt="Сообщество Educaty" loading="lazy"/></figure>
+        <figure class="c3"><img src="../assets/community/c_1.jpg" alt="Гости вечеринки Educaty" loading="lazy"/></figure>
+        <figure class="c4"><img src="../assets/community/c_2.jpg" alt="Участники мероприятия Educaty" loading="lazy"/></figure>
+        <figure class="c5"><img src="../assets/community/c_8.jpg" alt="Встреча комьюнити Educaty" loading="lazy"/></figure>
+        <figure class="c6"><img src="../assets/community/c_7.jpg" alt="Участница комьюнити" loading="lazy"/></figure>
+        <figure class="c7"><img src="../assets/community/c_4.jpg" alt="Гостья мероприятия Educaty" loading="lazy"/></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15 · ДИПЛОМ -->
+  <section class="slide diploma bg-ink">
+    <img class="mark on-dark" src="../assets/img/logo.png" alt="Educaty"/>
+    <div class="slide-inner">
+      <div>
+        <span class="eyebrow on-dark"><span class="dot"></span>По окончании курса</span>
+        <h2>Каждый ученик получает диплом.</h2>
+        <p class="lead">В конце программы вы получаете официальный диплом об окончании курса Educaty — подтверждение освоенной профессии AI-визуала, которое можно показывать клиентам и работодателям.</p>
+      </div>
+      <div class="cert">
+        <div class="ct-top">
+          <img class="ct-logo" src="../assets/img/logo.png" alt="Educaty"/>
+          <div class="ct-seal">AI<br/>CREATOR</div>
+        </div>
+        <div class="ct-k">Диплом об окончании</div>
+        <div class="ct-h">AI-визуал<br/>Профессия креатора</div>
+        <div class="ct-line"></div>
+        <div class="ct-foot">
+          <span>Образовательная программа<br/><b>Educaty</b></span>
+          <span style="text-align:right">11 модулей<br/><b>2026</b></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16 · ФИНАЛ -->
+  <section class="slide finale bg-ink">
+    <div class="slide-inner">
+      <div class="fgrid">
+        <figure class="fvid"><video src="../assets/seria/seria.mp4" poster="../assets/seria/seria_poster.jpg" autoplay muted loop playsinline preload="auto"></video></figure>
+        <figure class="ff1"><img src="../assets/seria/s_5.jpg" alt="Серия Educaty" loading="lazy"/></figure>
+        <figure class="ff2"><img src="../assets/seria/s_9.jpg" alt="Серия Educaty" loading="lazy"/></figure>
+        <figure class="ff3"><img src="../assets/seria/s_11.jpg" alt="Серия Educaty" loading="lazy"/></figure>
+        <figure class="ff4"><img src="../assets/seria/s_12.jpg" alt="Серия Educaty" loading="lazy"/></figure>
+      </div>
+      <div class="overlay">
+        <div class="box">
+          <h2>Твоя история <em>начинается здесь.</em></h2>
+          <p>Через 11 модулей ты создаёшь визуал и видео уровня рекламных кампаний — и превращаешь это в профессию, за которую платят бренды.</p>
+          <div class="brand">Я — креатор. AI — креатор.</div>
+          <img class="brand-logo" src="../assets/img/logo.png" alt="Educaty"/>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<nav class="dots" id="dots" aria-hidden="true"></nav>
+
+<script>
+  const deck = document.getElementById('deck');
+  const slides = Array.from(deck.querySelectorAll('.slide'));
+  const dotsWrap = document.getElementById('dots');
+
+  // авто-фит: гарантируем, что любой слайд помещается на экран ТВ целиком
+  function fit(){
+    slides.forEach(s=>{
+      const inner = s.querySelector('.slide-inner');
+      if(!inner) return;
+      inner.style.transform='none';
+      const cs = getComputedStyle(s);
+      const availH = s.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      const availW = s.clientWidth  - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      const needH = inner.scrollHeight, needW = inner.scrollWidth;
+      const k = Math.min(1, availH/needH, availW/needW);
+      if(k < 0.999) inner.style.transform = 'scale('+k.toFixed(4)+')';
+    });
+  }
+  window.addEventListener('load', fit);
+  setTimeout(fit, 600);
+
+  // точки-индикаторы
+  slides.forEach((s,i)=>{
+    const b = document.createElement('button');
+    if(s.classList.contains('bg-yellow') || s.classList.contains('bg-cream')) b.classList.add('dark');
+    b.addEventListener('click',()=>go(i));
+    dotsWrap.appendChild(b);
+  });
+  const dots = Array.from(dotsWrap.children);
+
+  function current(){
+    return Math.round(deck.scrollTop / deck.clientHeight);
+  }
+  function go(i){
+    i = Math.max(0, Math.min(slides.length-1, i));
+    deck.scrollTo({top:i*deck.clientHeight, behavior:'smooth'});
+  }
+  function setActive(){
+    const c = current();
+    dots.forEach((d,i)=>{
+      d.classList.toggle('active', i===c);
+      // цвет точки под фон текущего слайда
+      const dark = slides[c].classList.contains('bg-yellow') || slides[c].classList.contains('bg-cream');
+      d.classList.toggle('dark', dark && i!==c);
+    });
+  }
+  deck.addEventListener('scroll', ()=>{ window.requestAnimationFrame(setActive); }, {passive:true});
+  setActive();
+
+  // кнопка звука у клиентского ролика (модуль 07)
+  const sndBtn = document.getElementById('sndBtn');
+  const clientVid = document.getElementById('clientVid');
+  if(sndBtn && clientVid){
+    sndBtn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      clientVid.muted = !clientVid.muted;
+      if(!clientVid.muted) clientVid.volume = 1;
+      sndBtn.classList.toggle('unmuted', !clientVid.muted);
+      sndBtn.setAttribute('aria-label', clientVid.muted ? 'Включить звук' : 'Выключить звук');
+    });
+  }
+
+  // навигация клавиатурой / пультом
+  window.addEventListener('keydown',(e)=>{
+    const c = current();
+    if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){ e.preventDefault(); go(c+1); }
+    else if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){ e.preventDefault(); go(c-1); }
+    else if(e.key==='Home'){ e.preventDefault(); go(0); }
+    else if(e.key==='End'){ e.preventDefault(); go(slides.length-1); }
+  });
+
+  // пересчёт при ресайзе ТВ/окна — держим текущий слайд
+  let idx = 0;
+  deck.addEventListener('scroll',()=>{ idx = current(); },{passive:true});
+  window.addEventListener('resize',()=>{ fit(); deck.scrollTo({top:idx*deck.clientHeight}); });
+</script>
+
+</body>
+</html>
