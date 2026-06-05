@@ -174,14 +174,11 @@
       font-size:clamp(17px,1.4vw,20px);max-width:44ch;color:var(--ink);opacity:.82;
       margin:22px 0 28px;line-height:1.5;
     }
-    .hero .ctas{display:flex;gap:14px;flex-wrap:wrap}
+    .hero .ctas{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start}
+    .hero .ctas .cta-stack{display:flex;flex-direction:column;align-items:center;gap:10px}
     .hero .cta-note{
-      font-size:14px;color:var(--ink);opacity:.7;font-weight:500;
-      margin:14px 0 0;display:flex;align-items:center;gap:8px;
-    }
-    .hero .cta-note::before{
-      content:"";width:6px;height:6px;border-radius:999px;background:var(--ink);
-      display:inline-block;flex:none;
+      font-size:13px;color:var(--ink);opacity:.7;font-weight:500;
+      margin:0;text-align:center;
     }
     @media (max-width: 520px){
       .hero .ctas{flex-direction:column;align-items:stretch}
@@ -772,13 +769,15 @@
         </h1>
         <p class="sub">Создавай контент мирового уровня без камер, съёмок и границ. Один ноутбук, один курс — и навыки, которые работают на тебя каждый день.</p>
         <div class="ctas">
-          <a class="btn btn-primary cta-mc" href="#masterclass">
-            Начать с бесплатного мастер-класса
-            <span class="arrow">→</span>
-          </a>
+          <div class="cta-stack">
+            <a class="btn btn-primary cta-mc" href="#masterclass">
+              Начать с бесплатного мастер-класса
+              <span class="arrow">→</span>
+            </a>
+            <p class="cta-note">В AI-студии в Санкт-Петербурге</p>
+          </div>
           <a class="btn btn-ghost" href="#program">Посмотреть программу</a>
         </div>
-        <p class="cta-note">В AI-студии в Санкт-Петербурге</p>
       </div>
 
       <aside class="hero-side">
@@ -906,35 +905,35 @@
       <div class="section-head">
         <div>
           <span class="eyebrow"><span class="dot"></span>Что ты сможешь после обучения</span>
-          <h2>Контент, который раньше делала команда — теперь твоя суперсила.</h2>
+          <h2>Контент уровня брендовых кампаний — твоей рукой.</h2>
         </div>
-        <p class="lead">Этот курс не про «попробовать Nano Banana или Kling». Это про то, как собирать видео, фото и тексты на уровне топ-студий — каждый день и без выгорания.</p>
+        <p class="lead">Курс не про «попробовать Nano Banana или Kling». Это про то, как делать фото и видео уровня рекламных кампаний — и превращать это в профессию, за которую платят.</p>
       </div>
 
       <div class="caps">
         <article class="cap span-8 ink">
-          <div class="num">01 / Видео</div>
-          <h3>Снимай ролики, не вставая из-за стола.</h3>
-          <p>Сценарий, виртуальный актёр, голос, монтаж и субтитры — собираешь полноценный ролик за один вечер с помощью связки AI-инструментов.</p>
-          <span class="tag">Veo · Kling · ElevenLabs · CapCut</span>
+          <div class="num">01 / Фото</div>
+          <h3>Коммерческая съёмка уровня кампании.</h3>
+          <p>Переносишь реальный продукт клиента в генерацию: одежда на модели, предметка, бьюти, аксессуары. Консистентные серии и лукбук уровня бренда — ядро курса.</p>
+          <span class="tag">Midjourney · Higgsfield · Nano Banana</span>
         </article>
         <article class="cap span-4">
-          <div class="num">02 / Фото</div>
-          <h3>Студийные кадры из ничего.</h3>
-          <p>Генерируй фотосессии, обложки для бренда за 10 минут.</p>
-          <span class="tag">Midjourney · Nano Banana · Flux</span>
+          <div class="num">02 / Видео</div>
+          <h3>Рекламные ролики без съёмки.</h3>
+          <p>Ролики с людьми и продуктом, морфинг, форматы под Reels и Shorts.</p>
+          <span class="tag">Kling · Seedance · Syntx</span>
         </article>
         <article class="cap span-4">
-          <div class="num">03 / Текст</div>
-          <h3>Тексты, которые читают.</h3>
-          <p>Сценарии, посты, рассылки и лендинги — в твоём голосе, а не в голосе бота.</p>
-          <span class="tag">Claude · GPT · Gemini</span>
+          <div class="num">03 / Своё лицо</div>
+          <h3>Аватары и нейрофотосессии.</h3>
+          <p>Фотосессии со своим лицом, говорящие персонажи с липсинком и голосом.</p>
+          <span class="tag">ElevenLabs · липсинк</span>
         </article>
         <article class="cap span-8">
-          <div class="num">04 / Система</div>
-          <h3>Контент-конвейер, который работает за тебя.</h3>
-          <p>Соберём личный AI-стек: от идеи до публикации. Один промпт — один пост. Один шаблон — десять Reels. Одна связка — постоянный поток рилсов, видео и сторис без копирайтера и видеомонтажёра.</p>
-          <span class="tag">Notion · Make · n8n · Telegram</span>
+          <div class="num">04 / Профессия</div>
+          <h3>Доход с реальных заказов.</h3>
+          <p>От первых клиентов до собственной студии: ниши и роли на рынке AI-визуала, упаковка специалиста, поиск клиентов, ценообразование, личный бренд. На выходе — диплом, портфолио из 11 модулей и дорожная карта первых заказов.</p>
+          <span class="tag">Диплом · портфолио · клиенты</span>
         </article>
       </div>
     </div>
