@@ -175,6 +175,14 @@
       margin:22px 0 28px;line-height:1.5;
     }
     .hero .ctas{display:flex;gap:14px;flex-wrap:wrap}
+    .hero .cta-note{
+      font-size:14px;color:var(--ink);opacity:.7;font-weight:500;
+      margin:14px 0 0;display:flex;align-items:center;gap:8px;
+    }
+    .hero .cta-note::before{
+      content:"";width:6px;height:6px;border-radius:999px;background:var(--ink);
+      display:inline-block;flex:none;
+    }
     @media (max-width: 520px){
       .hero .ctas{flex-direction:column;align-items:stretch}
       .hero .ctas .btn{width:100%}
@@ -757,7 +765,7 @@
   <section class="hero">
     <div class="wrap grid">
       <div class="hero-main">
-        <span class="eyebrow"><span class="dot"></span>AI-школа Educaty · Петербург · лето 2026</span>
+        <span class="eyebrow"><span class="dot"></span>Онлайн-школа Educaty · Набор лето 2026</span>
         <h1 class="display">
           <span class="first">Я — креатор.</span><br/>
           <span class="accent">AI — креатор.<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M2 12 C 20 4, 40 18, 60 10 S 100 4, 120 12 S 160 18, 198 8" /></svg></span>
@@ -770,6 +778,7 @@
           </a>
           <a class="btn btn-ghost" href="#program">Посмотреть программу</a>
         </div>
+        <p class="cta-note">В AI-студии в Санкт-Петербурге</p>
       </div>
 
       <aside class="hero-side">
@@ -783,8 +792,8 @@
   <!-- MARQUEE -->
   <div class="marquee" aria-hidden="true">
     <div class="marquee-track">
-      <span>MIDJOURNEY<i class="dot"></i>CLAUDE<i class="dot"></i>NANO BANANA<i class="dot"></i>FLUX<i class="dot"></i>CAPCUT<i class="dot"></i>GPT<i class="dot"></i>VEO<i class="dot"></i>KLING<i class="dot"></i>ELEVENLABS<i class="dot"></i>GEMINI<i class="dot"></i></span>
-      <span>MIDJOURNEY<i class="dot"></i>CLAUDE<i class="dot"></i>NANO BANANA<i class="dot"></i>FLUX<i class="dot"></i>CAPCUT<i class="dot"></i>GPT<i class="dot"></i>VEO<i class="dot"></i>KLING<i class="dot"></i>ELEVENLABS<i class="dot"></i>GEMINI<i class="dot"></i></span>
+      <span>MIDJOURNEY<i class="dot"></i>CLAUDE<i class="dot"></i>NANO BANANA<i class="dot"></i>SEEDANCE<i class="dot"></i>HIGGSFIELD<i class="dot"></i>GPT<i class="dot"></i>SYNTX<i class="dot"></i>KLING<i class="dot"></i>ELEVENLABS<i class="dot"></i>GEMINI<i class="dot"></i></span>
+      <span>MIDJOURNEY<i class="dot"></i>CLAUDE<i class="dot"></i>NANO BANANA<i class="dot"></i>SEEDANCE<i class="dot"></i>HIGGSFIELD<i class="dot"></i>GPT<i class="dot"></i>SYNTX<i class="dot"></i>KLING<i class="dot"></i>ELEVENLABS<i class="dot"></i>GEMINI<i class="dot"></i></span>
     </div>
   </div>
 
@@ -829,7 +838,7 @@
         <div class="grid">
           <div class="mc-info">
             <div class="badges">
-              <span class="badge">Бесплатно · оффлайн</span>
+              <span class="badge">Бесплатно · Санкт-Петербург</span>
               <span class="badge alt">Камерный формат · мест мало</span>
             </div>
             <h2>Бесплатный мастер-класс в AI-студии Educaty.</h2>
